@@ -13,12 +13,12 @@ from utils.my_log import MyLog
 
 de = dotenv.dotenv_values()
 
+
+log = MyLog()
 if __name__ == "__main__":
     from behave import __main__ as behave_executable
 
     behave_executable.main(None)
-
-log = MyLog()
 
 eel.init(de.get("EEL_INIT"))
 

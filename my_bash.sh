@@ -1,7 +1,6 @@
 rm -rf main.deb
-python3 -m eel runner.py statics/ --add-data './.env:.'
 pip3 install -r requirements.txt
-python3 -m eel runner.py statics
+python3 -m eel runner.py statics/ --add-data './.env:.'
 pyinstaller runner.spec
 #!/bin/sh
 # Create folders.

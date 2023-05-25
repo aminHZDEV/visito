@@ -18,3 +18,7 @@ A local app to visit doctor
 * install libs in requirements.txt file 
 * make app.log file in root directory 
 * just run the runner.py file and enjoy
+**************************************
+#### How make setup 
+* in ubuntu 22.04 run "bash my_bash.sh"
+* in windows run "bash my_bash.bat"
