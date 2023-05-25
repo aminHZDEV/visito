@@ -1,0 +1,18 @@
+@echo off
+DEL /S "main.deb"
+python3 "-m" "eel" "runner.py" "statics/" "--add-data" "./.env:."
+pip3 "install" "-r" "requirements.txt"
+python3 "-m" "eel" "runner.py" "statics"
+pyinstaller "runner.spec"
+[ "-e" "package" "]" && DEL /S "package"
+mkdir "-p" "package\opt"
+mkdir "-p" "package\usr\share\applications"
+mkdir "-p" "package\usr\share\icons\hicolor\scalable\apps"
+COPY  "dist\runner" "package\opt\main"
+COPY  "statics\icons\elmos.svg" "package\usr\share\icons\hicolor\scalable\apps\main.svg"
+COPY  "main.desktop" "package\usr\share\applications"
+find "package\opt\main" "-type" "f" "-exec" "chmod" "644" "--" "{}" "+"
+find "package\opt\main" "-type" "d" "-exec" "chmod" "755" "--" "{}" "+"
+find "package\usr\share" "-type" "f" "-exec" "chmod" "644" "--" "{}" "+"
+chmod "+x" "package\opt\main\runner"
+fpm

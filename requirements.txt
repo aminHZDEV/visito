@@ -1,6 +1,5 @@
 behave
-pymongo
 python-dotenv
 Eel
 PyInstaller
-
+names

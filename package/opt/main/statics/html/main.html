@@ -10,7 +10,10 @@
 <script type='text/javascript'>
         async function onLoad(){
             behave = await eel.load_behave()();
-            document.getElementById("main").innerHTML = behave
+            for (let i = 0; i < behave.length; i++) {
+                document.getElementById("main").innerHTML += behave[i] + "<br>";
+            }
+
         }
         onLoad();
         </script>

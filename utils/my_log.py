@@ -8,7 +8,7 @@ __email__ = "amin.hasan.zarei@gmail.com"
 __status__ = "Production"
 
 import logging
-from my_dotenv import MyDotenv
+from utils.my_dotenv import MyDotenv
 
 
 class MyLog(MyDotenv):
