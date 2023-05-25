@@ -9,6 +9,10 @@ A local app to visit doctor
   * LOG_FILE="app.log"
   * LOG_MODE="w"
   * LOG_FORMAT="%(name)s - %(levelname)s - %(message)s
+  * MAIN_VERTICAL="720"
+  * MAIN_HORIZONTAL="480"
+  * EEL_INIT="statics"
+  * EEL_START="/html/main.html"
 * install libs in requirements.txt file 
 * make app.log file in root directory 
 * just run the runner.py file and enjoy

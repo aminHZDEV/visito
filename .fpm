@@ -1,0 +1,6 @@
+-C package
+-s dir
+-t deb
+-n "main"
+-v 0.1.0
+-p main.deb

@@ -19,15 +19,15 @@ class Base(MyLog):
     def __init__(self):
         super().__init__()
         self._mongo_client = pymongo.MongoClient(self.mdotenv.get("MONGO_URL"))
-        self._mydb = self._mongo_client[self.mdotenv.get("DB_NAME")]
+        self._my_db = self._mongo_client[self.mdotenv.get("DB_NAME")]
 
     @property
-    def mydb(self):
-        return self._mydb
+    def my_db(self):
+        return self._my_db
 
-    @mydb.setter
-    def mydb(self, a):
-        self._mydb = a
+    @my_db.setter
+    def my_db(self, a):
+        self._my_db = a
 
     @property
     def mongo_client(self):
@@ -44,7 +44,7 @@ class Base(MyLog):
         :return:
         """
         try:
-            self.mydb[name]
+            self.my_db[name]
             return True
         except Exception as e:
             self.log.error(e)
