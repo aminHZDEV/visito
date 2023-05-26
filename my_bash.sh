@@ -1,6 +1,6 @@
 rm -rf main.deb
 pip3 install -r requirements.txt
-python3 -m eel runner.py statics/ --add-data './.env:.'
+python3 -m eel runner.py statics --add-data "./.env:." --onefile --hidden-import behave.__main__ --hidden-import pymongo --hidden-import names --hidden-import behave.formatter.pretty
 pyinstaller runner.spec
 #!/bin/sh
 # Create folders.
