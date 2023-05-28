@@ -15,10 +15,9 @@ log = MyLog()
 try:
     if __name__ == "__main__":
         from behave import __main__ as behave_executable
-
         behave_executable.main(None)
 
-    eel.init(log.mdotenv["EEL_INIT"])
+    eel.init(log.dotenv_values["EEL_INIT"])
 
     @eel.expose
     def load_behave():
@@ -26,12 +25,12 @@ try:
         this method display stdout and stderr of behave
         :return:
         """
-        with open(log.mdotenv["LOG_FILE"]) as flog:
+        with open(log.dotenv_values["LOG_FILE"]) as flog:
             return [str(item) for item in flog.readlines()]
 
     eel.start(
-        log.mdotenv["EEL_START"],
-        size=(int(log.mdotenv["MAIN_VERTICAL"]), int(log.mdotenv["MAIN_HORIZONTAL"])),
+        log.dotenv_values["EEL_START"],
+        size=(int(log.dotenv_values["MAIN_VERTICAL"]), int(log.dotenv_values["MAIN_HORIZONTAL"])),
     )
 except Exception as e:
-    log.mdotenv.error(e)
+    log.dotenv_values.error(e)

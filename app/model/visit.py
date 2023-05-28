@@ -23,7 +23,7 @@ class Visit(Base):
         symptom: str = "",
         diagnosis: str = "",
         medicine: str = "",
-        time: str = datetime.now().strftime(de.mdotenv.get("TIME_FORMAT")),
+        time: str = datetime.now().strftime(de.dotenv_values.get("TIME_FORMAT")),
     ):
         super().__init__()
         self._visit_id = visit_id

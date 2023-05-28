@@ -19,9 +19,9 @@ class MyLog(MyDotenv):
     def __init__(self):
         super().__init__()
         logging.basicConfig(
-            filename=self.mdotenv.get("LOG_FILE"),
-            filemode=self.mdotenv.get("LOG_MODE"),
-            format=self.mdotenv.get("LOG_FORMAT"),
+            filename=self.dotenv_values.get("LOG_FILE"),
+            filemode=self.dotenv_values.get("LOG_MODE"),
+            format=self.dotenv_values.get("LOG_FORMAT"),
         )
         self._log = logging
 
