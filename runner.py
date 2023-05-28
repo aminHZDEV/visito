@@ -15,6 +15,7 @@ log = MyLog()
 try:
     if __name__ == "__main__":
         from behave import __main__ as behave_executable
+
         behave_executable.main(None)
 
     eel.init(log.dotenv_values["EEL_INIT"])
@@ -30,7 +31,10 @@ try:
 
     eel.start(
         log.dotenv_values["EEL_START"],
-        size=(int(log.dotenv_values["MAIN_VERTICAL"]), int(log.dotenv_values["MAIN_HORIZONTAL"])),
+        size=(
+            int(log.dotenv_values["MAIN_VERTICAL"]),
+            int(log.dotenv_values["MAIN_HORIZONTAL"]),
+        ),
     )
 except Exception as e:
     log.dotenv_values.error(e)
