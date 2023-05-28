@@ -9,11 +9,12 @@ __status__ = "Production"
 
 from datetime import datetime
 from utils.my_dotenv import MyDotenv
+from app.db.base import Base
 
 de = MyDotenv()
 
 
-class Visit:
+class Visit(Base):
     def __init__(
         self,
         visit_id: int = -1,
@@ -24,6 +25,7 @@ class Visit:
         medicine: str = "",
         time: str = datetime.now().strftime(de.mdotenv.get("TIME_FORMAT")),
     ):
+        super().__init__()
         self._visit_id = visit_id
         self._doctor_id = doctor_id
         self._patient_id = patient_id
@@ -87,3 +89,24 @@ class Visit:
     @time.setter
     def time(self, a):
         self._time = a
+
+    def add(self) -> int:
+        """
+        this method add visit model to database
+        :return:
+        """
+        try:
+            record = self.my_db[Visit.__name__].insert_one(
+                {
+                    "doctor_id": self.doctor_id,
+                    "patient_id": self.patient_id,
+                    "symptom": self.symptom,
+                    "diagnosis": self.diagnosis,
+                    "medicine": self.medicine,
+                }
+            )
+            self.visit_id = record.inserted_id
+            return self.visit_id
+        except Exception as e:
+            self.log.error(e)
+            return -1

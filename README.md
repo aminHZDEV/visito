@@ -9,7 +9,7 @@ A local app to visit doctor
   * DB_NAME="mydatabase"
   * LOG_FILE="app.log"
   * LOG_MODE="w"
-  * LOG_FORMAT="%(name)s - %(levelname)s - %(message)s
+  * LOG_FORMAT="%(name)s - %(levelname)s - %(message)s"
   * MAIN_VERTICAL="720"
   * MAIN_HORIZONTAL="480"
   * EEL_INIT="statics"
