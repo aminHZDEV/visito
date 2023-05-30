@@ -3,46 +3,42 @@ Feature: Admin Management
   I want to be able to manage other administrators
   So that I can create, read, update, and delete their entries
 
-  Scenario Outline: Register an administrator
+  Background:
     Given I am logged in as an administrator
     And I am in the "Admins" section
-    When I click on the "Add" button
-    And I fill in <first_name>, <last_name>, <username>, <password> information
+
+  Scenario Outline: Register an administrator
+    When I click on the "Add Admin" button
+    And I fill in <administrator_name>, <username>, <password> information
     And I click on the "Submit" button
     Then the entry should be added to the "Admin" collection
 
     Examples:
-      | first_name  | last_name | username  | password  |
-      | Paul        | Goodrich  | abcdef    | 123       |
-      | Don         | Turner    | ghijkl    | 123       |
+      | administrator_name | username | password |
+      | John Goodrich      | abcdef   | 123      |
+      | Richard Turner     | ghijkl   | 123      |
 
   Scenario: Show a list of administrators
-    Given I am logged in as an administrator
-    When I click on the "Admins" button in order to navigate to the related section
-    Then administrators information should be returned
+    When I look at the existing entries
+    Then I should be able to see a table of existing administrators
 
   Scenario Outline: Update a administrator entry
-    Given I am logged in as an administrator
-    And I am in the "Admins" section
-    When I select a administrator "<administrator_name>" from the list of administrators entries
+    Given an admin with username <username> exists
+    When I edit <administrator_name>, <password> information of that administrator entry
     And I click on the "Update" button
-    And I edit <first_name>, <last_name>, <username>, <password> information
-    And I click on the "Submit" button
     Then the entry should be updated in the "Admin" collection
 
     Examples:
-      | administrator_name  | first_name  | last_name | username  | password  |
-      | Paul Goodrich       | Paul        | Goodrich  | abcdef    | 123       |
-      | Don Turner          | Don         | Turner    | ghijkl    | 123       |
+      | administrator_name | username | password |
+      | Paul Goodrich      | abcdef   | 123      |
+      | Don Turner         | ghijkl   | 123      |
 
   Scenario Outline: Delete a administrator entry
-    Given I am logged in as an administrator
-    And I am in the "Admins" section
-    When I select a administrator "<administrator_name>" from the list of administrators entries
-    And I click on the "Delete" button
+    Given an admin with username <username> exists
+    When I click on the "Delete" button of that administrator entry
     Then the entry should be deleted from the "Admin" collection
 
     Examples:
-      | administrator_name  |
-      | Paul Goodrich       |
-      | Don Turner          |
+      | username |
+      | abcdef   |
+      | ghijkl   |
