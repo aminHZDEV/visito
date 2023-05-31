@@ -1,6 +1,6 @@
 __author__ = "Mehdi Roudaki"
 __copyright__ = "Copyright 2023"
-__credits__ = ["KTeymoury", "Hamid Moradi"]
+__credits__ = ["Kaveh Teymoury", "Hamid Moradi"]
 __license__ = "MIT"
 __version__ = "1.0.0"
 __maintainer__ = ""
@@ -13,6 +13,7 @@ from app.db.base import Base
 from app.model.patient import Patient
 from app.model.doctor import Doctor
 from app.model.appointment import Appointment
+import names
 import random
 
 use_step_matcher("re")
@@ -100,14 +101,15 @@ def step_impl(context, doctor_name):
 
     context.my_appointment.doctor = context.my_doctor
 
+
 @step('I click on the "Schedule Appointment" button')
 def step_impl(context):
     """
     :type context: behave.runner.Context
     """
     current_record = context.my_appointments.find_one({'patient_id': context.my_patient.id_cart,
-                                                                'doctor_id': context.my_doctor.id_cart,
-                                                                'date': context.my_appointment.date})
+                                                       'doctor_id': context.my_doctor.id_cart,
+                                                       'date': context.my_appointment.date})
     if current_record:
         logger.log.warn('Record already exists.')
     else:
@@ -126,11 +128,11 @@ def step_impl(context):
     """
     :type context: behave.runner.Context
     """
-    curren_record = context.my_appointments.find_one({'_id': context.my_appointment.id_cart})
-    assert context.my_patient.id_cart == curren_record["patient_id"]
-    assert context.my_doctor.id_cart == curren_record["doctor_id"]
-    assert context.my_appointment.date == curren_record["date"]
-    logger.log.info(f'SAn appointment with following information created successfully:\n'
+    current_record = context.my_appointments.find_one({'_id': context.my_appointment.id_cart})
+    assert context.my_patient.id_cart == current_record["patient_id"]
+    assert context.my_doctor.id_cart == current_record["doctor_id"]
+    assert context.my_appointment.date == current_record["date"]
+    logger.log.info(f'An appointment with following information created successfully:\n'
                     f'\tPatient: {context.my_patient.name}\n'
                     f'\tDoctor: {context.my_doctor.name}\n'
-                    f'\tDate: {curren_record["date"]}')
+                    f'\tDate: {current_record["date"]}')
