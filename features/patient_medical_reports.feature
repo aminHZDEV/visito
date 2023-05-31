@@ -1,13 +1,13 @@
-Feature: Patient Portal
+Feature: Patient Medical Reports
   As a patient
   I want to be able to have access to my medical records
   So that I can view test results
 
   Scenario Outline: Access to medical records
-    Given I am in the "Medical Records" section
-    When I enter the recieved <token>
-    And I click on the "Show" button
-    Then my medical records should be shown
+    Given I have a medical record with token "<token>"
+    When I open "Medical Records" section
+    And enter my private token
+    Then my medical record should be shown
 
     Examples:
       | token     |
