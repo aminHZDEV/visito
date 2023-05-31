@@ -7,15 +7,17 @@ __maintainer__ = ""
 __email__ = "mehdiroudaki@hotmail.com"
 __status__ = "Production"
 
+import datetime
+
 from app.model.patient import Patient
 from app.model.doctor import Doctor
 
 
 class Appointment:
-    def __init__(self, patient: Patient = None, doctor: Doctor = None, date: str = "", id_cart=None):
+    def __init__(self, patient: Patient = None, doctor: Doctor = None, date: str = "1990-01-01 01:00 AM", id_cart=None):
         self._patient = patient
         self._doctor = doctor
-        self._date = date
+        self._date = datetime.datetime.strptime(date, "%Y-%m-%d %I:%M %p")
         self._id_cart = id_cart
 
     # Setters and Getters lie beyond this comment
@@ -44,7 +46,7 @@ class Appointment:
 
     @date.setter
     def date(self, a):
-        self._date = a
+        self._date = datetime.datetime.strptime(a, "%Y-%m-%d %I:%M %p")
 
     # ID accessor
     @property

@@ -9,8 +9,9 @@ __status__ = "Production"
 
 
 class Patient:
-    def __init__(self, name: str = "", id_cart: int = -1):
+    def __init__(self, name: str = "", ssid: str = "", id_cart: int = -1):
         self._name = name
+        self._ssid = ssid
         self._id_cart = id_cart
 
     @property
@@ -22,9 +23,21 @@ class Patient:
         self._name = a
 
     @property
+    def ssid(self):
+        return self._ssid
+
+    @ssid.setter
+    def ssid(self, a):
+        self._ssid = a
+
+    @property
     def id_cart(self):
         return self._id_cart
 
     @id_cart.setter
     def id_cart(self, a):
         self._id_cart = a
+
+    @staticmethod
+    def make_dummy():
+        return Patient('Default Pearson', 'xxxxxxxxxx')
