@@ -13,6 +13,6 @@ Feature: Appointment Scheduling
     Then an appointment should be scheduled for the selected patient with the selected doctor on the selected date and time
 
     Examples:
-      | patient_name | patient_ssid | date_and_time          | doctor_name        |
-      | John Doe     | 1234567890   | 2023-06-01 10:00:00 AM | Richard Goodrich   |
-      | Jane Smith   | 9087654321   | 2023-06-02 02:00:00 PM | Christopher Turner |
+      | patient_name | patient_ssid | date_and_time       | doctor_name        |
+      | John Doe     | 1234567890   | 2023-06-01 10:00 AM | Richard Goodrich   |
+      | Jane Smith   | 9087654321   | 2023-06-02 02:00 PM | Christopher Turner |
