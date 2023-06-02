@@ -9,13 +9,24 @@ __status__ = "Production"
 
 import eel
 from utils.my_log import MyLog
+import pytest
+import os
 
 log = MyLog()
 
 try:
     if __name__ == "__main__":
+        pytest.main(
+            args=[
+                "--capture",
+                "no",
+                "--log-cli-level",
+                "DEBUG",
+                "--log-file",
+                os.path.join(os.getcwd(), log.dotenv_values.get("LOG_FILE")),
+            ]
+        )
         from behave import __main__ as behave_executable
-
         behave_executable.main(None)
 
     eel.init(log.dotenv_values["EEL_INIT"])

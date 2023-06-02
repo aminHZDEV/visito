@@ -7,7 +7,10 @@ __maintainer__ = ""
 __email__ = "amin.hasan.zarei@gmail.com"
 __status__ = "Production"
 
+from utils.decorators.behave_examples_decorator import insert_examples
 
+
+@insert_examples()
 def before_feature(context, feature):
     pass
 
