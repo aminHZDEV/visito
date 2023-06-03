@@ -29,4 +29,4 @@ jobs:
         pip install -r requirements.txt
     - name: Test with pytest
       run: |
-        pytest
+        python3 -m eel runner.py statics --add-data "./.env:." --onefile --hidden-import behave.__main__ --hidden-import pymongo --hidden-import names --hidden-import behave.formatter.pretty
