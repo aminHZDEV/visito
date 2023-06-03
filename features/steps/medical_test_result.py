@@ -12,7 +12,7 @@ from utils.my_log import MyLog
 from app.db.base import Base
 from app.model.patient import Patient
 from app.model.doctor import Doctor
-from app.model.test_result import TestResults
+from app.model.result_of_tests import TestResults
 import names
 
 use_step_matcher("re")
