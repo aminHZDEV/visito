@@ -8,10 +8,12 @@ __email__ = "kaveh.teymoury@gmail.com"
 __status__ = "Production"
 
 from behave import given, when, then, step, use_step_matcher
+
 from utils.my_log import MyLog
 from app.db.base import Base
 from app.model.patient import Patient
 from app.model.invoice import Invoice
+from app.model.payment import Payment
 
 use_step_matcher("re")
 
@@ -41,6 +43,7 @@ def step_impl(context, patient_name, patient_ssid):
     if not patient_record:
         patient_record = database_handler.my_db[Patient.__name__].insert_one({'name': patient_name,
                                                                               'ssid': patient_ssid})
+        patient_record = database_handler.my_db[Patient.__name__].find_one({'_id': patient_record.inserted_id})
     context.my_patient = Patient(name=patient_record['name'],
                                  ssid=patient_record['ssid'],
                                  id_cart=patient_record['_id'])
@@ -163,9 +166,11 @@ def step_impl(context):
     """
     patient_record = database_handler.my_db[Patient.__name__].find_one({'_id': context.my_invoice["patient_id"]})
     if context.my_payments:
-        logger.log.info(f'List of payments made by {patient_record["name"]} for {context.my_invoice["invoice_number"]}:')
-        table = '\t|              Date              |     Amount     |'
+        table = '\t|            Date            |     Amount     |'
         for item in context.my_payments:
-            table += f'\n\t|{item.date: ^32}|{item.amount: ^16}|'
+            current_payment = database_handler.my_db[Payment.__name__].find_one({'_id': item})
+            table += f'\n\t|{current_payment["date"]:    %Y-%m-%d %I:%M %p     }|{current_payment["amount"]: ^16}|'
+        logger.log.info(f'List of payments made by {patient_record["name"]} for {context.my_invoice["invoice_number"]}:'
+                        f'\n{table}')
     else:
         logger.log.info(f'There are no payment records for patient {patient_record["name"]}.')
