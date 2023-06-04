@@ -4,7 +4,8 @@ Feature: Reporting and Analytics
   So that I can get insights into the operations and performance
 
   Scenario Outline: Generate a report for a specific time period
-    Given I am logged in as an administrator
+    Given necessary collections exist
+    And I am logged in as an administrator
     And I am in the "Reports" section
     When I select the time period "<time_period>" for which I want to generate a report
     And I select the type of report "<report_type>" that I want to generate
@@ -13,6 +14,6 @@ Feature: Reporting and Analytics
 
     Examples:
       | time_period              | report_type    |
-      | 2023-01-01 to 2023-06-01 | Patient Visits |
-      | 2023-01-01 to 2023-06-01 | Revenue        |
+      | 2023-01-01 to 2023-06-05 | Patient Visits |
+      | 2023-01-01 to 2023-06-05 | Revenue        |
     
