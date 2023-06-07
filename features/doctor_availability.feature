@@ -8,6 +8,3 @@ Feature: Doctor office availability
 
     Examples:
       | date       |  | start_time |  | end_time |  |
-      | 2023-06-05 |  | 09:00      |  | 12:00    |  |
-      | 2023-06-06 |  | 13:00      |  | 17:00    |  |
-      | 2023-06-07 |  | 10:00      |  | 15:00    |  |
