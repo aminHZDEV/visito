@@ -9,8 +9,8 @@ __status__ = "Production"
 
 import datetime
 
-from app.model.patient import Patient
 from app.model.doctor import Doctor
+from app.model.patient import Patient
 
 
 class Medicine:
@@ -47,5 +47,5 @@ class Medicine:
     def id_cart(self, a):
         self._id_cart = a
 
-    def increase_quantity(self, amount:int = 1):
+    def increase_quantity(self, amount: int = 1):
         self.quantity += amount

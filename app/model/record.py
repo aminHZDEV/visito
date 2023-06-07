@@ -9,12 +9,13 @@ __status__ = "Production"
 
 import datetime
 
-from app.model.patient import Patient
 from app.model.doctor import Doctor
+from app.model.patient import Patient
 
 
 class Record:
-    def __init__(self, patient: Patient = None, token: str = "", info: str = "", date: str = "1990-01-01 01:00 AM", id_cart=None):
+    def __init__(self, patient: Patient = None, token: str = "", info: str = "", date: str = "1990-01-01 01:00 AM",
+                 id_cart=None):
         self._patient = patient
         self._token = token
         self._info = info

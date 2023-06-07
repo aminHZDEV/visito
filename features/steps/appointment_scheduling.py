@@ -7,14 +7,15 @@ __maintainer__ = ""
 __email__ = "sm_roudaki@comp.iust.ac.ir"
 __status__ = "Production"
 
-from behave import given, when, then, step, use_step_matcher
-from utils.my_log import MyLog
-from app.db.base import Base
-from app.model.patient import Patient
-from app.model.doctor import Doctor
-from app.model.appointment import Appointment
 import names
 import random
+from behave import given, when, then, step, use_step_matcher
+
+from app.db.base import Base
+from app.model.appointment import Appointment
+from app.model.doctor import Doctor
+from app.model.patient import Patient
+from utils.my_log import MyLog
 
 use_step_matcher("re")
 

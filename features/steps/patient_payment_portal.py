@@ -7,14 +7,15 @@ __maintainer__ = ""
 __email__ = "kaveh.teymoury@gmail.com"
 __status__ = "Production"
 
-from behave import given, when, then, step, use_step_matcher
-from utils.my_log import MyLog
-from app.db.base import Base
-from app.model.patient import Patient
-from app.model.invoice import Invoice
-from app.model.payment import Payment
 import names
 import random
+from behave import given, when, then, step, use_step_matcher
+
+from app.db.base import Base
+from app.model.invoice import Invoice
+from app.model.patient import Patient
+from app.model.payment import Payment
+from utils.my_log import MyLog
 
 use_step_matcher("re")
 
@@ -38,7 +39,7 @@ def step_impl(context, invoice_number):
         if patient_record:
             patient_id = patient_record['_id']
         else:
-            patient_id = database_handler.my_db[Patient.__name__].insert_one({'name': dummy.name, 'ssid': dummy.ssid})\
+            patient_id = database_handler.my_db[Patient.__name__].insert_one({'name': dummy.name, 'ssid': dummy.ssid}) \
                 .inserted_id
         invoice_record = database_handler.my_db[Invoice.__name__].insert_one({
             'patient_id': patient_id,
@@ -95,5 +96,6 @@ def step_impl(context):
         'date': payment.date
     })
     payment.id_cart = payment_record.inserted_id
-    database_handler.my_db[Invoice.__name__].update_one({'invoice_number': context.my_token}, {'$push': {'payments': payment.id_cart}})
+    database_handler.my_db[Invoice.__name__].update_one({'invoice_number': context.my_token},
+                                                        {'$push': {'payments': payment.id_cart}})
     logger.log.info(f'Successfully created a payment entry for {payment.invoice_number}')

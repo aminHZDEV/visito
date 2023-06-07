@@ -9,8 +9,8 @@ __status__ = "Production"
 
 import datetime
 
-from app.model.patient import Patient
 from app.model.doctor import Doctor
+from app.model.patient import Patient
 
 
 class Payment:

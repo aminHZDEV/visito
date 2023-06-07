@@ -32,7 +32,8 @@ _report_functions = {'Patient Visits': _visit_report,
 
 
 class Report:
-    def __init__(self, database: Database = None,  time_period: str = "1990-01-01 to 2023-12-20", report_type: str = "NOP"):
+    def __init__(self, database: Database = None, time_period: str = "1990-01-01 to 2023-12-20",
+                 report_type: str = "NOP"):
         self._database = database
         period = time_period.split(' to ')
         self._date_from = datetime.datetime.strptime(period[0], "%Y-%m-%d")
@@ -80,4 +81,3 @@ class Report:
         if self._report_function is None:
             raise AttributeError('You need to select a report type first.')
         return self._report_function(self._database, self.date_from, self.date_to)
-

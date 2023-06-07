@@ -8,6 +8,7 @@ __email__ = "amin.hasan.zarei@gmail.com"
 __status__ = "Production"
 
 from datetime import datetime
+
 from utils.my_dotenv import MyDotenv
 
 de = MyDotenv()
@@ -15,14 +16,14 @@ de = MyDotenv()
 
 class Visit:
     def __init__(
-        self,
-        visit_id: int = -1,
-        doctor_id: int = -1,
-        patient_id: int = -1,
-        symptom: str = "",
-        diagnosis: str = "",
-        medicine: str = "",
-        time: str = datetime.now().strftime(de.mdotenv.get("TIME_FORMAT")),
+            self,
+            visit_id: int = -1,
+            doctor_id: int = -1,
+            patient_id: int = -1,
+            symptom: str = "",
+            diagnosis: str = "",
+            medicine: str = "",
+            time: str = datetime.now().strftime(de.mdotenv.get("TIME_FORMAT")),
     ):
         self._visit_id = visit_id
         self._doctor_id = doctor_id

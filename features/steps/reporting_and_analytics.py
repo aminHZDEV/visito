@@ -8,14 +8,13 @@ __email__ = "kaveh.teymoury@gmail.com"
 __status__ = "Production"
 
 import datetime
-
 from behave import given, when, then, step, use_step_matcher
 
-from utils.my_log import MyLog
 from app.db.base import Base
 from app.model.analytics import Report
 from app.model.appointment import Appointment
 from app.model.payment import Payment
+from utils.my_log import MyLog
 
 use_step_matcher("re")
 
@@ -28,7 +27,6 @@ def step_impl(context):
     appointment = database_handler.my_db[Appointment.__name__]
     payment = database_handler.my_db[Payment.__name__]
     logger.log.info(f'Collections {Appointment.__name__} and {Payment.__name__} exist.')
-
 
 
 @step('I am in the "Reports" section')
@@ -58,6 +56,7 @@ def step_impl(context, report_type):
     context.my_report.report_type = report_type
     logger.log.info('Report type selected successfully.')
 
+
 @step('I click on the "Generate" button')
 def step_impl(context):
     """
@@ -65,7 +64,6 @@ def step_impl(context):
     """
     context.generated_result = context.my_report.generate()
     logger.log.info('Report successfully generated!')
-
 
 
 @then("a report for the selected time period with the selected report type should be generated")

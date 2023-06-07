@@ -9,11 +9,11 @@ __status__ = "Production"
 
 from behave import given, when, then, step, use_step_matcher
 
-from utils.my_log import MyLog
 from app.db.base import Base
-from app.model.patient import Patient
 from app.model.invoice import Invoice
+from app.model.patient import Patient
 from app.model.payment import Payment
+from utils.my_log import MyLog
 
 use_step_matcher("re")
 
@@ -129,7 +129,7 @@ def step_impl(context, invoice_number):
         if patient_record:
             patient_id = patient_record['_id']
         else:
-            patient_id = database_handler.my_db[Patient.__name__].insert_one({'name': dummy.name, 'ssid': dummy.ssid})\
+            patient_id = database_handler.my_db[Patient.__name__].insert_one({'name': dummy.name, 'ssid': dummy.ssid}) \
                 .inserted_id
         invoice_record = context.my_invoices.insert_one({
             'patient_id': patient_id,
