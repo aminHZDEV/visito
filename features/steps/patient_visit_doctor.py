@@ -24,8 +24,9 @@ log = MyLog()
 @given("the patient has (?P<symptom>.+)")
 def step_impl(context, symptom):
     name = names.get_full_name()
-    record = base.my_db[Patient.__name__].insert_one({"name": name})
-    context.patient = Patient(name=name, id_cart=record.inserted_id)
+    patient = Patient(name=name)
+    patient.add()
+    context.patient = patient
     context.symptom = symptom
     log.log.info(f"the patient has {symptom}")
 
@@ -33,8 +34,9 @@ def step_impl(context, symptom):
 @when("the doctor examines the patient")
 def step_impl(context):
     name = names.get_full_name()
-    record = base.my_db[Doctor.__name__].insert_one({"name": name})
-    context.doctor = Doctor(name=name, id_cart=record.inserted_id)
+    doctor = Doctor(name=name)
+    doctor.add()
+    context.doctor = doctor
     log.log.info(f"the doctor examines the patient")
 
 
@@ -46,31 +48,22 @@ def step_impl(context, diagnosis):
 
 @then("the doctor should prescribe (?P<medicine>.+)")
 def step_impl(context, medicine):
-    record = base.my_db[Visit.__name__].insert_one(
-        {
-            "doctor_id": context.doctor.id_cart,
-            "patient_id": context.patient.id_cart,
-            "symptom": context.symptom,
-            "diagnosis": context.diagnosis,
-            "medicine": medicine,
-        }
-    )
-
-    context.visit = Visit(
-        visit_id=record.inserted_id,
+    visit = Visit(
         doctor_id=context.doctor.id_cart,
         patient_id=context.patient.id_cart,
         symptom=context.symptom,
         medicine=medicine,
         diagnosis=context.diagnosis,
     )
-    record = base.my_db[Visit.__name__].find_one({"_id": context.visit.visit_id})
-    assert context.visit.visit_id == record["_id"]
-    assert context.visit.doctor_id == record["doctor_id"]
-    assert context.visit.patient_id == record["patient_id"]
-    assert context.visit.medicine == record["medicine"]
-    assert context.visit.symptom == record["symptom"]
-    assert context.visit.diagnosis == record["diagnosis"]
+    visit_id = visit.add()
+    context.visit = visit
+    search_visit = base.my_db[Visit.__name__].find_one({"_id": visit_id})
+    assert context.visit.visit_id == search_visit["_id"]
+    assert context.visit.doctor_id == search_visit["doctor_id"]
+    assert context.visit.patient_id == search_visit["patient_id"]
+    assert context.visit.medicine == search_visit["medicine"]
+    assert context.visit.symptom == search_visit["symptom"]
+    assert context.visit.diagnosis == search_visit["diagnosis"]
     log.log.info(f"the doctor should prescribe {medicine} ")
     log.log.info(
         f"the patient {context.patient.name} examine successfully by doctor {context.doctor.name} at {context.visit.time}"

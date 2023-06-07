@@ -1,10 +1,10 @@
-__author__ = "AminHZDEV"
+__author__ = "Hatam"
 __copyright__ = "Copyright 2023"
 __credits__ = []
 __license__ = "MIT"
 __version__ = "1.0.0"
 __maintainer__ = ""
-__email__ = "amin.hasan.zarei@gmail.com"
+__email__ = "hatamabolghasemi@gmail.com"
 __status__ = "Production"
 
 from datetime import datetime
@@ -14,33 +14,33 @@ from app.db.base import Base
 de = MyDotenv()
 
 
-class Visit(Base):
+class TestResults(Base):
     def __init__(
         self,
-        visit_id: int = -1,
+        test_result_id: int = -1,
         doctor_id: int = -1,
         patient_id: int = -1,
-        symptom: str = "",
-        diagnosis: str = "",
+        medical_test: str = "",
+        results: str = "",
         medicine: str = "",
         time: str = datetime.now().strftime(de.dotenv_values.get("TIME_FORMAT")),
     ):
         super().__init__()
-        self._visit_id = visit_id
+        self._test_result_id = test_result_id
         self._doctor_id = doctor_id
         self._patient_id = patient_id
-        self._symptom = symptom
-        self._diagnosis = diagnosis
+        self._medical_test = medical_test
+        self._results = results
         self._medicine = medicine
         self._time = time
 
     @property
-    def visit_id(self):
-        return self._visit_id
+    def test_result_id(self):
+        return self._test_result_id
 
-    @visit_id.setter
-    def visit_id(self, a):
-        self._visit_id = a
+    @test_result_id.setter
+    def test_result_id(self, a):
+        self._test_result_id = a
 
     @property
     def doctor_id(self):
@@ -59,20 +59,20 @@ class Visit(Base):
         self._patient_id = a
 
     @property
-    def symptom(self):
-        return self._symptom
+    def medical_test(self):
+        return self._medical_test
 
-    @symptom.setter
-    def symptom(self, a):
-        self._symptom = a
+    @medical_test.setter
+    def medical_test(self, a):
+        self._medical_test = a
 
     @property
-    def diagnosis(self):
-        return self._diagnosis
+    def results(self):
+        return self._results
 
-    @diagnosis.setter
-    def diagnosis(self, a):
-        self._diagnosis = a
+    @results.setter
+    def results(self, a):
+        self._results = a
 
     @property
     def medicine(self):
@@ -92,21 +92,21 @@ class Visit(Base):
 
     def add(self) -> int:
         """
-        this method add visit model to database
+        this method add test_result model to database
         :return:
         """
         try:
-            record = self.my_db[Visit.__name__].insert_one(
+            record = self.my_db[TestResults.__name__].insert_one(
                 {
                     "doctor_id": self.doctor_id,
                     "patient_id": self.patient_id,
-                    "symptom": self.symptom,
-                    "diagnosis": self.diagnosis,
+                    "medical_test": self.medical_test,
+                    "results": self.results,
                     "medicine": self.medicine,
                 }
             )
-            self.visit_id = record.inserted_id
-            return self.visit_id
+            self.test_result_id = record.inserted_id
+            return self.test_result_id
         except Exception as e:
             self.log.error(e)
             return -1
