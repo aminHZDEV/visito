@@ -8,11 +8,13 @@ __email__ = "isaacsalmanpour@gmail.com"
 __status__ = "Production"
 
 from datetime import time
+from app.db.base import Base
 
 
-class Availability:
+class Availability(Base):
 
     def __init__(self, start, end, date):
+        super().__init__()
         self._start = start
         self._end = end
         self._date = date
@@ -40,3 +42,24 @@ class Availability:
     @end.setter
     def end(self, end):
         self._end = end
+
+
+
+    def add(self) -> int:
+        """
+        this method add doctor model to database
+        :return:
+        """
+        try:
+            record = self.my_db[Availability.__name__].insert_one(
+                {
+                    "date": self.date,
+                    "start": self.start,
+                    "end": self.end,
+                }
+            )
+            return record
+        except Exception as e:
+            self.log.error(e)
+            return -1
+

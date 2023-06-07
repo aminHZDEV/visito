@@ -7,4 +7,4 @@ Feature: Doctor office availability
     And my availability calendar should show that date as available from <start_time> to <end_time>
 
     Examples:
-      | date       |  | start_time |  | end_time |  |
+      | date       | start_time  | end_time |

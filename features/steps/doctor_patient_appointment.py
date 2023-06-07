@@ -11,7 +11,7 @@ use_step_matcher("re")
 base = Base()
 log = MyLog()
 
-@step("I create an appointment in (?P<date>.+) and (?P<time>.+) for patient with name (?P<name>.+)")
+@when("I create an appointment in (?P<date>.+) and (?P<time>.+) for patient with name (?P<name>.+)")
 def step_impl(context, date, time, name):
     base.my_db[Appointment.__name__].insert_one({"name": name, "time": time, "date": date})
 

@@ -7,4 +7,3 @@ Feature: doctor office service
 
     Examples:
       | name         | price   | duration |
-      | Consultation | $100.00 | 1        |
