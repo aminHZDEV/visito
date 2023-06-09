@@ -47,7 +47,7 @@ class Availability(Base):
 
     def add(self) -> int:
         """
-        this method add doctor model to database
+        this method add availability model to database
         :return:
         """
         try:

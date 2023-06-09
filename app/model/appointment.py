@@ -46,3 +46,21 @@ class Appointment:
     @time.setter
     def time(self, a):
         self._time = a
+
+        def add(self) -> int:
+            """
+            this method add appointment model to database
+            :return:
+            """
+            try:
+                record = self.my_db[Appointment.__name__].insert_one(
+                    {
+                        "date": self.date,
+                        "name": self.name,
+                        "time": self.time,
+                    }
+                )
+                return record
+            except Exception as e:
+                self.log.error(e)
+                return -1

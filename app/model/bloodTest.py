@@ -103,3 +103,27 @@ class BloodTest:
     def medicine(self, medicine):
         self._medicine = medicine
 
+
+    def add(self) -> int:
+        """
+        this method add blood test model to database
+        :return:
+        """
+        try:
+            record = self.my_db[BloodTest.__name__].insert_one(
+                {
+                    "time": self.time,
+                    "result": self.result,
+                    "purpose": self.purpose,
+                    "doctor_id": self.doctor_id,
+                    "patient_id": self.patient_id,
+                    "date": self.date,
+                    "medicine": self.medicine,
+                    "location": self.location
+                }
+            )
+            self.blood_test_id = record.inserted_id
+            return self.blood_test_id
+        except Exception as e:
+            self.log.error(e)
+            return -1

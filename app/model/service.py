@@ -46,3 +46,21 @@ class Service:
     @duration.setter
     def duration(self, a):
         self._duration = a
+
+    def add(self) -> int:
+        """
+        this method add doctor model to database
+        :return:
+        """
+        try:
+            record = self.my_db[Service.__name__].insert_one(
+                {
+                    "duration": self.duration,
+                    "name": self.name,
+                    "price": self.price,
+                }
+            )
+            return record
+        except Exception as e:
+            self.log.error(e)
+            return -1
