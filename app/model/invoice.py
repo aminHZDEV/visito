@@ -82,8 +82,14 @@ class Invoice:
 
     # Class methods
     def add_payment(self, payment: Payment) -> bool:
+        """
+        Adds the given payment information to this invoice
+        :param payment: A Payment record meant for this invoice
+        :return: True if operation was successful and False if it fails
+        """
         try:
             self.payments.append(payment)
             return True
-        except:
+        except Exception as e:
+            print(f'Something bad happened while we were trying to add payment. Exception:\n{e}')
             return False

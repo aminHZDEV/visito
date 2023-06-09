@@ -46,3 +46,12 @@ class Doctor:
     @field.setter
     def field(self, a):
         self._field = a
+
+    @staticmethod
+    def make_dummy():
+        """
+        Create a dummy object for testing purposes
+        :rtype: Doctor
+        :return: A dummy Doctor object
+        """
+        return Doctor('Default Pearson', 'xxxxxxx', 'dummiologist')

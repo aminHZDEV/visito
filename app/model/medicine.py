@@ -49,3 +49,12 @@ class Medicine:
 
     def increase_quantity(self, amount: int = 1):
         self.quantity += amount
+
+    @staticmethod
+    def make_dummy():
+        """
+        Create a dummy object for testing purposes
+        :rtype: Medicine
+        :return: A dummy Medicine object
+        """
+        return Medicine('Dummy Drug', 50)

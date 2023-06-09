@@ -56,3 +56,12 @@ class Payment:
     @date.setter
     def date(self, a):
         self._date = datetime.datetime.strptime(a, "%Y-%m-%d %I:%M %p")
+
+    @staticmethod
+    def make_dummy():
+        """
+        Create a dummy object for testing purposes
+        :rtype: Payment
+        :return: A dummy Payment object
+        """
+        return Payment(50, 'INV-0000', '1990-01-01 01:00 AM')

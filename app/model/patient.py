@@ -40,4 +40,9 @@ class Patient:
 
     @staticmethod
     def make_dummy():
+        """
+        Create a dummy object for testing purposes
+        :rtype: Patient
+        :return: A dummy Patient object
+        """
         return Patient('Default Pearson', 'xxxxxxxxxx')

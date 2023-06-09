@@ -51,3 +51,12 @@ class Administrator:
     @password.setter
     def password(self, a):
         self._password = a
+
+    @staticmethod
+    def make_dummy():
+        """
+        Create a dummy object for testing purposes
+        :rtype: Administrator
+        :return: A dummy Administrator object
+        """
+        return Administrator('Default Pearson', 'dummy', 'dummy')
