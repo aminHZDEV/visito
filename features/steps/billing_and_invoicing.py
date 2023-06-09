@@ -14,6 +14,7 @@ from app.model.invoice import Invoice
 from app.model.patient import Patient
 from app.model.payment import Payment
 from utils.my_log import MyLog
+from utils.status import FindStatus, InsertStatus
 
 use_step_matcher("re")
 
@@ -38,16 +39,13 @@ def step_impl(context, patient_name, patient_ssid):
     :type patient_name: str
     :type patient_ssid: str
     """
-    patient_record = database_handler.my_db[Patient.__name__].find_one({'name': patient_name,
-                                                                        'ssid': patient_ssid})
-    if not patient_record:
-        patient_record = database_handler.my_db[Patient.__name__].insert_one({'name': patient_name,
-                                                                              'ssid': patient_ssid})
-        patient_record = database_handler.my_db[Patient.__name__].find_one({'_id': patient_record.inserted_id})
-    context.my_patient = Patient(name=patient_record['name'],
-                                 ssid=patient_record['ssid'],
-                                 id_cart=patient_record['_id'])
-
+    context.my_patient = Patient(name=patient_name, ssid=patient_ssid)
+    if context.my_patient.find_and_update() is FindStatus.RECORD_FOUND:
+        logger.log.info(f'Patient record for {patient_name} found.')
+    elif context.my_patient.add(update=False) is InsertStatus.INSERTED_SUCCESSFULLY:
+        logger.log.info(f'Patient record for {patient_name} created.')
+    else:
+        logger.log.error(f'Something weird happened while trying to get the entry for {patient_name}')
     logger.log.info(f'A patient named {patient_name} with SSID {patient_ssid} Exists.')
 
 
@@ -123,16 +121,12 @@ def step_impl(context, invoice_number):
     if invoice_record is None:
         logger.log.info('Creating a dummy entry for given invoice number.')
         dummy = Patient.make_dummy()
-        patient_record = database_handler.my_db[Patient.__name__].find_one({'name': dummy.name,
-                                                                            'ssid': dummy.ssid})
-        patient_id = None
-        if patient_record:
-            patient_id = patient_record['_id']
-        else:
-            patient_id = database_handler.my_db[Patient.__name__].insert_one({'name': dummy.name, 'ssid': dummy.ssid}) \
-                .inserted_id
+        if not dummy.find_and_update() is FindStatus.RECORD_FOUND:
+            if not context.my_patient.add(update=False) is InsertStatus.INSERTED_SUCCESSFULLY:
+                logger.log.error(f'Something weird happened while trying to get the entry for {dummy.name}')
+
         invoice_record = context.my_invoices.insert_one({
-            'patient_id': patient_id,
+            'patient_id': dummy.id_cart,
             'service': 'Dummy Service',
             'amount': 100,
             'payments': [],

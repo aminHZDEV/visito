@@ -16,6 +16,7 @@ from app.model.appointment import Appointment
 from app.model.doctor import Doctor
 from app.model.patient import Patient
 from utils.my_log import MyLog
+from utils.status import FindStatus, InsertStatus
 
 use_step_matcher("re")
 
@@ -47,20 +48,13 @@ def step_impl(context, patient_name, patient_ssid):
     :type patient_name: str
     :type patient_ssid: str
     """
-    patient_record = database_handler.my_db[Patient.__name__].find_one({'name': patient_name,
-                                                                        'ssid': patient_ssid})
-    if patient_record:
-        context.my_patient = Patient(name=patient_record['name'],
-                                     ssid=patient_record['ssid'],
-                                     id_cart=patient_record['_id'])
+    context.my_patient = Patient(name=patient_name, ssid=patient_ssid)
+    if context.my_patient.find_and_update() is FindStatus.RECORD_FOUND:
         logger.log.info(f'Patient record for {patient_name} found.')
-    else:
-        patient_record = database_handler.my_db[Patient.__name__].insert_one({'name': patient_name,
-                                                                              'ssid': patient_ssid})
-        context.my_patient = Patient(name=patient_name,
-                                     ssid=patient_ssid,
-                                     id_cart=patient_record.inserted_id)
+    elif context.my_patient.add(update=False) is InsertStatus.INSERTED_SUCCESSFULLY:
         logger.log.info(f'Patient record for {patient_name} created.')
+    else:
+        logger.log.error(f'Something weird happened while trying to get the entry for {patient_name}')
     context.my_appointment = Appointment(patient=context.my_patient)
 
 

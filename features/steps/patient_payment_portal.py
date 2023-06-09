@@ -16,6 +16,7 @@ from app.model.invoice import Invoice
 from app.model.patient import Patient
 from app.model.payment import Payment
 from utils.my_log import MyLog
+from utils.status import FindStatus, InsertStatus
 
 use_step_matcher("re")
 
@@ -33,16 +34,12 @@ def step_impl(context, invoice_number):
     if invoice_record is None:
         logger.log.info('Creating a dummy entry for given invoice number.')
         dummy = Patient.make_dummy()
-        patient_record = database_handler.my_db[Patient.__name__].find_one({'name': dummy.name,
-                                                                            'ssid': dummy.ssid})
-        patient_id = None
-        if patient_record:
-            patient_id = patient_record['_id']
-        else:
-            patient_id = database_handler.my_db[Patient.__name__].insert_one({'name': dummy.name, 'ssid': dummy.ssid}) \
-                .inserted_id
+        if not dummy.find_and_update() is FindStatus.RECORD_FOUND:
+            if not context.my_patient.add(update=False) is InsertStatus.INSERTED_SUCCESSFULLY:
+                logger.log.error(f'Something weird happened while trying to get the entry for {dummy.name}')
+
         invoice_record = database_handler.my_db[Invoice.__name__].insert_one({
-            'patient_id': patient_id,
+            'patient_id': dummy.id_cart,
             'service': 'Dummy Service',
             'amount': 100,
             'payments': [],

@@ -9,6 +9,7 @@ __status__ = "Production"
 
 
 from app.db.base import Base
+from utils.status import FindStatus, InsertStatus
 
 
 class Patient(Base):
@@ -53,7 +54,7 @@ class Patient(Base):
         return Patient('Default Pearson', 'xxxxxxxxxx')
 
     # Database operations rest in this place
-    def find_and_update(self) -> int:
+    def find_and_update(self) -> FindStatus:
         """
         Searches the base database and update this object
         :return: Returns 1 if operation was successful and -1 if it doesn't find the record
@@ -64,24 +65,24 @@ class Patient(Base):
                 record = collection.find_one({'name': self._name, 'ssid': self._ssid})
                 if record:
                     self._id_cart = record['_id']
-                    return 1   # Successfully found
+                    return FindStatus.RECORD_FOUND
                 else:
                     self.log.error(f'No records found for patient {self._name}, {self._ssid}')
-                    return -1  # No records found
+                    return FindStatus.NO_RECORDS
             else:
                 record = collection.find_one({'_id': self._id_cart})
                 if record:
                     self._name = record['name']
                     self._ssid = record['ssid']
-                    return 1   # Successfully found
+                    return FindStatus.RECORD_FOUND
                 else:
-                    self.log.error(f'No records found for id: {self._id_cart}')
-                    return -1  # No records found
+                    self.log.warn(f'No records found for id: {self._id_cart}')
+                    return FindStatus.NO_RECORDS
         except Exception as e:
             self.log.error(f'Unexpected exception:\n\t{e}')
-            return 0
+            return FindStatus.UNEXPECTED_ERROR
 
-    def add(self, update: bool = False) -> int:
+    def add(self, update: bool = False) -> InsertStatus:
         """
         Updates the entry or adds this object to base database
         :param update: If it's True updates the database entry if it already exists
@@ -92,18 +93,18 @@ class Patient(Base):
             if self.id_cart is -1:
                 record = collection.find_one({'ssid': self._ssid})
                 if record:
+                    self._id_cart = record['_id']
                     if update:
-                        self._id_cart = record['_id']
                         collection.update_one({'_id': self._id_cart}, {'$set': {'name': self._name}})
-                        return 2   # Updated successfully
+                        return InsertStatus.UPDATED_SUCCESSFULLY
                     else:
-                        self.log.error(f'An entry for ssid {self._ssid} already exists. '
-                                       'Set the update flag if you want to update it!')
-                        return -2  # Duplicate entry error
+                        self.log.warn(f'An entry for ssid {self._ssid} already exists. '
+                                      'Set the update flag if you want to update it!')
+                        return InsertStatus.DUPLICATE_ENTRY
                 else:
                     record = collection.insert_one({'name': self._name, 'ssid': self._ssid})
                     self._id_cart = record.inserted_id
-                    return 1  # Inserted successfully
+                    return InsertStatus.INSERTED_SUCCESSFULLY
             else:
                 record = collection.find_one({'_id': self._id_cart})
                 if record:
@@ -111,14 +112,14 @@ class Patient(Base):
                         collection.update_one({'_id': self._id_cart}, {'$set': {'name': self._name,
                                                                                 'ssid': self._ssid}
                                                                        })
-                        return 2   # Updated successfully
+                        return InsertStatus.UPDATED_SUCCESSFULLY
                     else:
-                        self.log.error('This entry was inserted before. '
-                                       'Set the update flag if you want to update it!')
-                        return -2  # Duplicate entry error
+                        self.log.warn('This entry was inserted before. '
+                                      'Set the update flag if you want to update it!')
+                        return InsertStatus.DUPLICATE_ID
                 else:
                     self.log.error('Weird ID was provided. ID must be either a valid ID or -1')
-                    return -3  # Bad ID
+                    return InsertStatus.BAD_ID
         except Exception as e:
-            self.log.error(f'Unexpected exception:\n\t{e}')
-            return 0
+            self.log.warn(f'Unexpected exception:\n\t{e}')
+            return InsertStatus.UNEXPECTED_ERROR

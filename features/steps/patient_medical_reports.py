@@ -16,6 +16,7 @@ from app.db.base import Base
 from app.model.patient import Patient
 from app.model.record import Record
 from utils.my_log import MyLog
+from utils.status import FindStatus, InsertStatus
 
 use_step_matcher("re")
 
@@ -36,25 +37,19 @@ def step_impl(context, token):
     else:
         logger.log.info('Creating a dummy medical record for given private token.')
         dummy = Patient.make_dummy()
-        patient_collection = database_handler.my_db[Patient.__name__]
-        patient_record = patient_collection.find_one({'name': dummy.name,
-                                                      'ssid': dummy.ssid})
-        patient_id = None
-        if patient_record:
-            patient_id = patient_record['_id']
-        else:
-            patient_id = patient_collection.insert_one({'name': dummy.name, 'ssid': dummy.ssid}).inserted_id
+        if not dummy.find_and_update() is FindStatus.RECORD_FOUND:
+            if not context.my_patient.add(update=False) is InsertStatus.INSERTED_SUCCESSFULLY:
+                logger.log.error(f'Something weird happened while trying to get the entry for {dummy.name}')
+
         current_record = context.my_records.insert_one({
-            'patient_id': patient_id,
+            'patient_id': dummy.id_cart,
             'token': token,
             'info': "You'll die soon mate",
             'date': datetime.datetime.utcnow().strftime("%Y-%m-%d %I:%M %p")
         })
         current_record = context.my_records.find_one({'_id': current_record.inserted_id})
-    patient_record = database_handler.my_db[Patient.__name__].find_one({'_id': current_record['patient_id']})
-    patient = Patient(name=patient_record['name'],
-                      ssid=patient_record['ssid'],
-                      id_cart=current_record['patient_id'])
+    patient = Patient(id_cart=current_record['patient_id'])
+    patient.find_and_update()
     medical_record = Record(patient=patient,
                             token=current_record['token'],
                             info=current_record['info'],
