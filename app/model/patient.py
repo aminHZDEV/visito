@@ -8,10 +8,12 @@ __email__ = "amin.hasan.zarei@gmail.com"
 __status__ = "Production"
 
 
-from pymongo.database import Database
+from app.db.base import Base
 
-class Patient:
+
+class Patient(Base):
     def __init__(self, name: str = "", ssid: str = "", id_cart: int = -1):
+        super().__init__()
         self._name = name
         self._ssid = ssid
         self._id_cart = id_cart
@@ -51,59 +53,72 @@ class Patient:
         return Patient('Default Pearson', 'xxxxxxxxxx')
 
     # Database operations rest in this place
-    def find_and_update(self, database: Database) -> int:
+    def find_and_update(self) -> int:
         """
-        Searches the given database and update this object
-        :param database: Target Database
+        Searches the base database and update this object
         :return: Returns 1 if operation was successful and -1 if it doesn't find the record
         """
-        collection = database[self.__name__]
-        if self.id_cart is -1:
-            record = collection.find_one({'name': self._name, 'ssid': self._ssid})
-            if record:
-                self._id_cart = record['_id']
-                return 1   # Successfully found
-            else:
-                return -1  # No records found
-        else:
-            record = collection.find_one({'_id': self._id_cart})
-            if record:
-                self._name = record['name']
-                self._ssid = record['ssid']
-                return 1   # Successfully found
-            else:
-                return -1  # No records found
-
-    def add(self, database: Database, update: bool = False) -> int:
-        """
-        Updates the entry or adds this object to given database
-        :param update: If it's True updates the database entry if it already exists
-        :param database: Target Database
-        :return: Returns 1 if operation was successful and -1 if it doesn't find the record
-        """
-        collection = database[self.__name__]
-        if self.id_cart is -1:
-            record = collection.find_one({'ssid': self._ssid})
-            if record:
-                if update:
+        try:
+            collection = self.my_db[self.__name__]
+            if self.id_cart is -1:
+                record = collection.find_one({'name': self._name, 'ssid': self._ssid})
+                if record:
                     self._id_cart = record['_id']
-                    collection.update_one({'_id': self._id_cart}, {'$set': {'name': self._name}})
-                    return 2   # Updated successfully
+                    return 1   # Successfully found
                 else:
-                    return -2  # Duplicate entry error
+                    self.log.error(f'No records found for patient {self._name}, {self._ssid}')
+                    return -1  # No records found
             else:
-                record = collection.insert_one({'name': self._name, 'ssid': self._ssid})
-                self._id_cart = record.inserted_id
-                return 1  # Inserted successfully
-        else:
-            record = collection.find_one({'_id': self._id_cart})
-            if record:
-                if update:
-                    collection.update_one({'_id': self._id_cart}, {'$set': {'name': self._name,
-                                                                            'ssid': self._ssid}
-                                                                   })
-                    return 2   # Updated successfully
+                record = collection.find_one({'_id': self._id_cart})
+                if record:
+                    self._name = record['name']
+                    self._ssid = record['ssid']
+                    return 1   # Successfully found
                 else:
-                    return -2  # Duplicate entry error
+                    self.log.error(f'No records found for id: {self._id_cart}')
+                    return -1  # No records found
+        except Exception as e:
+            self.log.error(f'Unexpected exception:\n\t{e}')
+            return 0
+
+    def add(self, update: bool = False) -> int:
+        """
+        Updates the entry or adds this object to base database
+        :param update: If it's True updates the database entry if it already exists
+        :return: Returns 1 if operation was successful and -1 if it doesn't find the record
+        """
+        try:
+            collection = self.my_db[self.__name__]
+            if self.id_cart is -1:
+                record = collection.find_one({'ssid': self._ssid})
+                if record:
+                    if update:
+                        self._id_cart = record['_id']
+                        collection.update_one({'_id': self._id_cart}, {'$set': {'name': self._name}})
+                        return 2   # Updated successfully
+                    else:
+                        self.log.error(f'An entry for ssid {self._ssid} already exists. '
+                                       'Set the update flag if you want to update it!')
+                        return -2  # Duplicate entry error
+                else:
+                    record = collection.insert_one({'name': self._name, 'ssid': self._ssid})
+                    self._id_cart = record.inserted_id
+                    return 1  # Inserted successfully
             else:
-                return -3  # Bad ID
+                record = collection.find_one({'_id': self._id_cart})
+                if record:
+                    if update:
+                        collection.update_one({'_id': self._id_cart}, {'$set': {'name': self._name,
+                                                                                'ssid': self._ssid}
+                                                                       })
+                        return 2   # Updated successfully
+                    else:
+                        self.log.error('This entry was inserted before. '
+                                       'Set the update flag if you want to update it!')
+                        return -2  # Duplicate entry error
+                else:
+                    self.log.error('Weird ID was provided. ID must be either a valid ID or -1')
+                    return -3  # Bad ID
+        except Exception as e:
+            self.log.error(f'Unexpected exception:\n\t{e}')
+            return 0
