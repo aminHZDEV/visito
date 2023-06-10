@@ -61,7 +61,7 @@ class Patient(Base):
         """
         try:
             collection = self.my_db[self.__name__]
-            if self.id_cart is -1:
+            if self.id_cart == -1:
                 record = collection.find_one({'name': self._name, 'ssid': self._ssid})
                 if record:
                     self._id_cart = record['_id']
@@ -90,7 +90,7 @@ class Patient(Base):
         """
         try:
             collection = self.my_db[self.__name__]
-            if self.id_cart is -1:
+            if self.id_cart == -1:
                 record = collection.find_one({'ssid': self._ssid})
                 if record:
                     self._id_cart = record['_id']

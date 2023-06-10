@@ -114,7 +114,7 @@ def step_impl(context):
         logger.log.info('Successfully generated a new appointment record.')
 
     context.my_record = current_record
-    context.my_appointment.id_cart = current_record.inserted_id
+    context.my_appointment.id_cart = current_record['_id']
 
 
 @then(
