@@ -8,17 +8,20 @@ __status__ = "Production"
 
 from datetime import datetime
 from utils.my_dotenv import MyDotenv
+from app.db.base import Base
 
 de = MyDotenv()
 
 
-class Appointment:
+class Appointment(Base):
+
     def __init__(
         self,
         name,
         date,
         time
     ):
+        super().__init__()
         self._name = name
         self._date = date
         self._time = time
@@ -47,20 +50,20 @@ class Appointment:
     def time(self, a):
         self._time = a
 
-        def add(self) -> int:
-            """
-            this method add appointment model to database
-            :return:
-            """
-            try:
-                record = self.my_db[Appointment.__name__].insert_one(
-                    {
-                        "date": self.date,
-                        "name": self.name,
-                        "time": self.time,
-                    }
-                )
-                return record
-            except Exception as e:
-                self.log.error(e)
-                return -1
+    def add(self) -> int:
+        """
+        this method add appointment model to database
+        :return:
+        """
+        try:
+            record = self.my_db[Appointment.__name__].insert_one(
+                {
+                    "date": self.date,
+                    "name": self.name,
+                    "time": self.time,
+                }
+            )
+            return record
+        except Exception as e:
+            self.log.error(e)
+            return -1

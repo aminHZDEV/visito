@@ -26,8 +26,8 @@ try:
                 os.path.join(os.getcwd(), log.dotenv_values.get("LOG_FILE")),
             ]
         )
-        # from behave import __main__ as behave_executable
-        # behave_executable.main(None)
+        from behave import __main__ as behave_executable
+        behave_executable.main(None)
 
     eel.init(log.dotenv_values["EEL_INIT"])
 

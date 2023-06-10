@@ -8,17 +8,19 @@ __status__ = "Production"
 
 from datetime import datetime
 from utils.my_dotenv import MyDotenv
+from app.db.base import Base
 
 de = MyDotenv()
 
 
-class Service:
+class Service(Base):
     def __init__(
         self,
         name,
         price,
         duration
     ):
+        super().__init__()
         self._name = name
         self._price = price
         self._duration = duration

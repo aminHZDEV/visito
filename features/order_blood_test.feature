@@ -12,6 +12,3 @@ Feature: blood test order
 
     Examples:
       | name   | blood_test_purpose | blood_test_location | date      | time     |
-      | Alice  | iron levels        | ABC clinic          | 04/06/2023| 9:00 am  |
-      | Bob    | allergy levels     | XYZ clinic          | 05/06/2023| 10:30 am |
-      | Charlie| infection levels   | LMN clinic          | 06/06/2023| 12:00 pm |

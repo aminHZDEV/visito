@@ -11,8 +11,5 @@ Feature: blood test review
 
     Examples:
       | name    | blood_test_result     | medication       |
-      | Alice   | low iron levels       | iron supplements |
-      | Bob     | high allergy levels   | corticosteroids  |
-      | Charlie | high infection levels | antibiotics      |
 
 

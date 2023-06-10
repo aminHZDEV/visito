@@ -7,8 +7,10 @@ __maintainer__ = ""
 __email__ = "isaacsalmanpour@gmail.com"
 __status__ = "Production"
 
+from app.db.base import Base
 
-class BloodTest:
+
+class BloodTest(Base):
     def __init__(
         self,
         blood_test_id: int = -1,
@@ -21,6 +23,7 @@ class BloodTest:
         patient_id: int = -1,
         medicine: str = "",
     ):
+        super().__init__()
         self._blood_test_id = blood_test_id
         self._result = result
         self._purpose = purpose
@@ -102,7 +105,6 @@ class BloodTest:
     @medicine.setter
     def medicine(self, medicine):
         self._medicine = medicine
-
 
     def add(self) -> int:
         """

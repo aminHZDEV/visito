@@ -21,3 +21,4 @@ def step_impl(context, date, time, name):
     myquery = {"name": name, "date": date, "time": time}
     found = base.my_db[Appointment.__name__].find(myquery)
     assert found is not None
+    log.log.info(f"an appointment in {date} and {time} for patient with name {name} is saved in database")

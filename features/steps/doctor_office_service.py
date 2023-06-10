@@ -30,7 +30,7 @@ def step_impl(context, name, price, duration):
     :type duration: str
     """
     service = base.my_db[Service.__name__].insert_one({"name": name, "price": price, "duration": duration})
-    log.log.info("Service added successfully")
+    log.log.info(f"{name} Service added successfully")
 
 
 @then("my service list should include (?P<name>.+), (?P<price>.+) and (?P<duration>.+)")
