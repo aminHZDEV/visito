@@ -14,6 +14,8 @@ from app.model.administrator import Administrator
 import names
 import random
 
+from utils.status import InsertStatus, FindStatus
+
 use_step_matcher("re")
 
 database_handler = Base()
@@ -72,13 +74,10 @@ def step_impl(context):
         else:
             logger.log.error('Failed to create a new entry because username was taken by someone else.')
     else:
-        current_record = context.my_administrators.insert_one(
-            {'name': context.my_admin.name,
-             'username': context.my_admin.username,
-             'password': context.my_admin.password})
-        context.my_admin.id_cart = current_record.inserted_id
-        context.my_record = current_record
-        logger.log.info('Information submitted successfully!')
+        if context.my_admin.add(update=False) is InsertStatus.INSERTED_SUCCESSFULLY:
+            logger.log.info('Information submitted successfully!')
+        else:
+            logger.log.info('Information submission failed!')
 
 
 @then('the entry should be added to the "Admin" collection')
@@ -127,20 +126,14 @@ def step_impl(context, username):
     :type context: behave.runner.Context
     :type username: str
     """
+    my_admin = Administrator(username=username)
     current_record = context.my_administrators.find_one({'username': username})
-    if current_record:
-        context.target_id = current_record['_id']
-    else:
-        name = names.get_full_name()
-        password = random.randint(1000, 99999999)
-        current_record = context.my_administrators.insert_one(
-            {'name': name, 'username': username, 'password': password})
-        context.target_id = current_record.inserted_id
-    context.my_admin = Administrator(name=current_record['name'],
-                                     username=current_record['username'],
-                                     password=current_record['password'],
-                                     id_cart=current_record['_id'])
-    logger.log.info(f'Username {username} belonging to {current_record["name"]} is selected')
+    if not (my_admin.find_and_update() is FindStatus.RECORD_FOUND):
+        my_admin.name = names.get_full_name()
+        my_admin.password = random.randint(1000, 99999999)
+        my_admin.add(update=False)
+    context.my_admin = my_admin
+    logger.log.info(f'Username {username} belonging to {my_admin.name} is selected')
 
 
 @when("I edit (?P<administrator_name>.+), (?P<password>.+) information of that administrator entry")
@@ -161,11 +154,11 @@ def step_impl(context):
     """
     :type context: behave.runner.Context
     """
-    context.my_administrators.update_one(
-        {'_id': context.target_id},
-        {'$set': {'name': context.my_admin.name, 'password': context.my_admin.password}}
-    )
-    logger.log.info('Update was successful!')
+    if context.my_admin.add(update=True) is InsertStatus.UPDATED_SUCCESSFULLY:
+        logger.log.info('Update was successful!')
+    else:
+        logger.log.info('Failed to update entry!')
+
 
 
 @then('the entry should be updated in the "Admin" collection')
@@ -173,7 +166,7 @@ def step_impl(context):
     """
     :type context: behave.runner.Context
     """
-    current_record = context.my_administrators.find_one({"_id": context.target_id})
+    current_record = context.my_administrators.find_one({"_id": context.my_admin.id_cart})
     assert context.my_admin.id_cart == current_record["_id"]
     assert context.my_admin.name == current_record["name"]
     assert context.my_admin.username == current_record["username"]
@@ -189,7 +182,7 @@ def step_impl(context):
     """
     :type context: behave.runner.Context
     """
-    context.my_administrators.delete_one({'_id': context.target_id})
+    context.my_administrators.delete_one({'_id': context.my_admin.id_cart})
     logger.log.info('Deletion was successful!')
 
 
@@ -198,7 +191,7 @@ def step_impl(context):
     """
     :type context: behave.runner.Context
     """
-    current_record = context.my_administrators.find_one({"_id": context.target_id})
+    current_record = context.my_administrators.find_one({"_id": context.my_admin.id_cart})
     if current_record:
         logger.log.error(f'User {context.my_admin.username} still remains in the collection!')
     else:

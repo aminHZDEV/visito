@@ -73,8 +73,8 @@ class Administrator(Base):
         :return: Returns 1 if operation was successful and -1 if it doesn't find the record
         """
         try:
-            collection = self.my_db[self.__name__]
-            if self.id_cart == -1:
+            collection = self.my_db[self.__class__.__name__]
+            if self.id_cart is None:
                 record = collection.find_one({'username': self._username})
                 if record:
                     self._id_cart = record['_id']
@@ -108,8 +108,8 @@ class Administrator(Base):
             self.log.error('Incomplete information! Please first fill the object.')
             return InsertStatus.INCOMPLETE_INFO
         try:
-            collection = self.my_db[self.__name__]
-            if self.id_cart == -1:
+            collection = self.my_db[self.__class__.__name__]
+            if self.id_cart is None:
                 record = collection.find_one({'username': self._username})
                 if record:
                     self._id_cart = record['_id']
@@ -141,8 +141,9 @@ class Administrator(Base):
                                       'Set the update flag if you want to update it!')
                         return InsertStatus.DUPLICATE_ID
                 else:
-                    self.log.error('Weird ID was provided. ID must be either a valid ID or -1')
+                    self.log.error('Weird ID was provided. ID must be either a valid ID or None.'
+                                   f'Your ID: {self._id_cart}')
                     return InsertStatus.BAD_ID
         except Exception as e:
-            self.log.warn(f'Unexpected exception:\n\t{e}')
+            self.log.error(f'Unexpected exception:\n\t{e}')
             return InsertStatus.UNEXPECTED_ERROR

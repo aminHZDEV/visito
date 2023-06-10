@@ -60,7 +60,7 @@ class Patient(Base):
         :return: Returns 1 if operation was successful and -1 if it doesn't find the record
         """
         try:
-            collection = self.my_db[self.__name__]
+            collection = self.my_db[self.__class__.__name__]
             if self.id_cart == -1:
                 record = collection.find_one({'name': self._name, 'ssid': self._ssid})
                 if record:
@@ -89,7 +89,7 @@ class Patient(Base):
         :return: Returns 1 if operation was successful and -1 if it doesn't find the record
         """
         try:
-            collection = self.my_db[self.__name__]
+            collection = self.my_db[self.__class__.__name__]
             if self.id_cart == -1:
                 record = collection.find_one({'ssid': self._ssid})
                 if record:
@@ -118,8 +118,9 @@ class Patient(Base):
                                       'Set the update flag if you want to update it!')
                         return InsertStatus.DUPLICATE_ID
                 else:
-                    self.log.error('Weird ID was provided. ID must be either a valid ID or -1')
+                    self.log.error('Weird ID was provided. ID must be either a valid ID or -1'
+                                   f'Your ID: {self._id_cart}')
                     return InsertStatus.BAD_ID
         except Exception as e:
-            self.log.warn(f'Unexpected exception:\n\t{e}')
+            self.log.error(f'Unexpected exception:\n\t{e}')
             return InsertStatus.UNEXPECTED_ERROR
