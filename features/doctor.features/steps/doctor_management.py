@@ -13,6 +13,8 @@ from app.db.base import Base
 from app.model.doctor import Doctor
 import names
 
+from utils.status import InsertStatus, FindStatus
+
 use_step_matcher("re")
 
 database_handler = Base()
@@ -72,13 +74,10 @@ def step_impl(context):
             logger.log.error('Failed to create a new entry because a doctor with that GMC number already exists.'
                              'Please use update function to edit existing records.')
     else:
-        current_record = context.my_doctors.insert_one(
-            {'name': context.my_doctor.name,
-             'gmc_number': context.my_doctor.gmc_number,
-             'field': context.my_doctor.field})
-        context.my_doctor.id_cart = current_record.inserted_id
-        context.my_record = current_record
-        logger.log.info('Information submitted successfully!')
+        if context.my_doctor.add(update=False) is InsertStatus.INSERTED_SUCCESSFULLY:
+            logger.log.info('Information submitted successfully!')
+        else:
+            logger.log.info('Information submission failed!')
 
 
 @then('the entry should be added to the "Doctor" collection')
@@ -127,19 +126,12 @@ def step_impl(context, gmc_number):
     :type context: behave.runner.Context
     :type gmc_number: str
     """
-    current_record = context.my_doctors.find_one({'gmc_number': gmc_number})
-    if current_record:
-        context.target_id = current_record['_id']
-    else:
-        name = names.get_full_name()
-        field = 'Unknown'
-        current_record = context.my_doctors.insert_one(
-            {'name': name, 'gmc_number': gmc_number, 'field': field})
-        context.target_id = current_record.inserted_id
-    context.my_doctor = Doctor(name=current_record['name'],
-                               gmc_number=current_record['gmc_number'],
-                               field=current_record['field'],
-                               id_cart=current_record['_id'])
+    my_doctor = Doctor(gmc_number=gmc_number)
+    if not (my_doctor.find_and_update() is FindStatus.RECORD_FOUND):
+        my_doctor.name = names.get_full_name()
+        my_doctor.field = 'Unknown'
+        my_doctor.add(update=False)
+    context.my_doctor = my_doctor
     logger.log.info(f'A doctor with GMC number {gmc_number} is selected')
 
 
@@ -161,11 +153,10 @@ def step_impl(context):
     """
     :type context: behave.runner.Context
     """
-    context.my_doctors.update_one(
-        {'_id': context.target_id},
-        {'$set': {'name': context.my_doctor.name, 'field': context.my_doctor.field}}
-    )
-    logger.log.info('Update was successful!')
+    if context.my_doctor.add(update=True) is InsertStatus.UPDATED_SUCCESSFULLY:
+        logger.log.info('Update was successful!')
+    else:
+        logger.log.info('Failed to update entry!')
 
 
 @then('the entry should be updated in the "Doctor" collection')
@@ -173,7 +164,7 @@ def step_impl(context):
     """
     :type context: behave.runner.Context
     """
-    current_record = context.my_doctors.find_one({"_id": context.target_id})
+    current_record = context.my_doctors.find_one({"_id": context.my_doctor.id_cart})
     assert context.my_doctor.id_cart == current_record["_id"]
     assert context.my_doctor.name == current_record["name"]
     assert context.my_doctor.gmc_number == current_record["gmc_number"]
@@ -189,7 +180,7 @@ def step_impl(context):
     """
     :type context: behave.runner.Context
     """
-    context.my_doctors.delete_one({'_id': context.target_id})
+    context.my_doctors.delete_one({'_id': context.my_doctor.id_cart})
     logger.log.info('Deletion was successful!')
 
 
@@ -198,7 +189,7 @@ def step_impl(context):
     """
     :type context: behave.runner.Context
     """
-    current_record = context.my_doctors.find_one({"_id": context.target_id})
+    current_record = context.my_doctors.find_one({"_id": context.my_doctor.id_cart})
     if current_record:
         logger.log.error(f'Doctor {context.my_doctors.name} still remains in the collection!')
     else:

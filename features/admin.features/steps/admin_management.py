@@ -127,7 +127,6 @@ def step_impl(context, username):
     :type username: str
     """
     my_admin = Administrator(username=username)
-    current_record = context.my_administrators.find_one({'username': username})
     if not (my_admin.find_and_update() is FindStatus.RECORD_FOUND):
         my_admin.name = names.get_full_name()
         my_admin.password = random.randint(1000, 99999999)
