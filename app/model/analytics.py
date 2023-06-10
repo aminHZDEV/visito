@@ -1,6 +1,6 @@
 __author__ = "Hamid Moradi Kamali"
 __copyright__ = "Copyright 2023"
-__credits__ = ["Mehdi Roudaki", "Kaveh Teymori"]
+__credits__ = ["Mehdi Roudaki", "Kaveh Teymoury"]
 __license__ = "MIT"
 __version__ = "1.0.0"
 __maintainer__ = ""
