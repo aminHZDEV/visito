@@ -2,6 +2,7 @@ from enum import Enum
 
 
 class InsertStatus(Enum):
+    INCOMPLETE_INFO = -4
     BAD_ID = -3
     DUPLICATE_ENTRY = -2
     DUPLICATE_ID = -1
