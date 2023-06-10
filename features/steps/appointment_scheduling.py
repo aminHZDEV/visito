@@ -85,14 +85,13 @@ def step_impl(context, doctor_name):
         name = doctor_name
         field = 'Unknown'
         gmc_number = 'D' + str(random.randint(1, 9999999)).zfill(7)
-        doctor_record = database_handler.my_db[Doctor.__name__].insert_one({'name': name,
-                                                                            'gmc_number': gmc_number,
-                                                                            'field': field})
         context.my_doctor = Doctor(name=doctor_name,
                                    gmc_number=gmc_number,
-                                   field=field,
-                                   id_cart=doctor_record.inserted_id)
-        logger.log.warn(f'Doctor record for {doctor_name} created.')
+                                   field=field)
+        if context.my_doctor.add(update=False) is InsertStatus.INSERTED_SUCCESSFULLY:
+            logger.log.info(f'Doctor record for {doctor_name} created.')
+        else:
+            logger.log.warn(f'Could not creat a record for doctor {doctor_name}, but fret not we still got a record.')
 
     context.my_appointment.doctor = context.my_doctor
 
@@ -102,19 +101,13 @@ def step_impl(context):
     """
     :type context: behave.runner.Context
     """
-    current_record = context.my_appointments.find_one({'patient_id': context.my_patient.id_cart,
-                                                       'doctor_id': context.my_doctor.id_cart,
-                                                       'date': context.my_appointment.date})
-    if current_record:
+    if context.my_appointment.find_and_update() is FindStatus.RECORD_FOUND:
         logger.log.warn('Record already exists.')
     else:
-        current_record = context.my_appointments.insert_one({'patient_id': context.my_patient.id_cart,
-                                                             'doctor_id': context.my_doctor.id_cart,
-                                                             'date': context.my_appointment.date})
-        logger.log.info('Successfully generated a new appointment record.')
-
-    context.my_record = current_record
-    context.my_appointment.id_cart = current_record['_id']
+        if context.my_appointment.add(update=False) is InsertStatus.INSERTED_SUCCESSFULLY:
+            logger.log.info('Successfully generated a new appointment record.')
+        else:
+            logger.log.warn('Could NOT add a new appointment record.')
 
 
 @then(
