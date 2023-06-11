@@ -76,7 +76,7 @@ class Doctor(Base):
                     self._field = record['field']
                     return FindStatus.RECORD_FOUND
                 else:
-                    self.log.error(f'No records found for doctor {self._gmc_number}.')
+                    self.log.warn(f'No records found for doctor {self._gmc_number}.')
                     return FindStatus.NO_RECORDS
             else:
                 record = collection.find_one({'_id': self._id_cart})

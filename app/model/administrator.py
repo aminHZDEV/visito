@@ -82,7 +82,7 @@ class Administrator(Base):
                     self._password = record['password']
                     return FindStatus.RECORD_FOUND
                 else:
-                    self.log.error(f'No records found for administrator {self._username}.')
+                    self.log.warn(f'No records found for administrator {self._username}.')
                     return FindStatus.NO_RECORDS
             else:
                 record = collection.find_one({'_id': self._id_cart})

@@ -79,7 +79,7 @@ class Appointment(Base):
                     self._id_cart = record['_id']
                     return FindStatus.RECORD_FOUND
                 else:
-                    self.log.error('No records found for queried appointment.')
+                    self.log.warn('No records found for queried appointment.')
                     return FindStatus.NO_RECORDS
             else:
                 record = collection.find_one({'_id': self._id_cart})

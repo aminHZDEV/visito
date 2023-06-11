@@ -67,7 +67,7 @@ class Patient(Base):
                     self._id_cart = record['_id']
                     return FindStatus.RECORD_FOUND
                 else:
-                    self.log.error(f'No records found for patient {self._name}, {self._ssid}')
+                    self.log.warn(f'No records found for patient {self._name}, {self._ssid}')
                     return FindStatus.NO_RECORDS
             else:
                 record = collection.find_one({'_id': self._id_cart})
