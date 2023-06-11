@@ -82,7 +82,6 @@ def step_impl(context, doctor_name):
                                    id_cart=doctor_record['_id'])
         logger.log.info(f'Doctor record for {doctor_name} found.')
     else:
-        name = doctor_name
         field = 'Unknown'
         gmc_number = 'D' + str(random.randint(1, 9999999)).zfill(7)
         context.my_doctor = Doctor(name=doctor_name,
@@ -91,6 +90,7 @@ def step_impl(context, doctor_name):
         if context.my_doctor.add(update=False) is InsertStatus.INSERTED_SUCCESSFULLY:
             logger.log.info(f'Doctor record for {doctor_name} created.')
         else:
+            context.my_doctor.find_and_update()
             logger.log.warn(f'Could not creat a record for doctor {doctor_name}, but fret not we still got a record.')
 
     context.my_appointment.doctor = context.my_doctor
