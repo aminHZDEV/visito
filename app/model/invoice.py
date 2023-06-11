@@ -22,9 +22,9 @@ class Invoice(Base):
         self._amount = amount
         self._invoice_number = invoice_number
         if payments is None:
-            self._payments = []
+            self._payments = set()
         else:
-            self._payments = payments
+            self._payments = set(payments)
         self._id_cart = id_cart
 
     # Setters and Getters lie beyond this comment
@@ -90,7 +90,7 @@ class Invoice(Base):
         :return: True if operation was successful and False if it fails
         """
         try:
-            self.payments.append(payment)
+            self.payments.add(payment)
             return True
         except Exception as e:
             print(f'Something bad happened while we were trying to add payment. Exception:\n{e}')
@@ -116,7 +116,7 @@ class Invoice(Base):
                     self._patient = patient
                     self._service = record['service']
                     self._amount = record['amount']
-                    self._payments = record['payments']
+                    self._payments = set(record['payments'])
                     return FindStatus.RECORD_FOUND
                 else:
                     self.log.warn(f'No records found for invoice number {self._invoice_number}.')
@@ -130,7 +130,7 @@ class Invoice(Base):
                     self._service = record['service']
                     self._amount = record['amount']
                     self._invoice_number = record['invoice_number']
-                    self._payments = record['payments']
+                    self._payments = set(record['payments'])
                     return FindStatus.RECORD_FOUND
                 else:
                     self.log.warn(f'No records found for id: {self._id_cart}')
@@ -154,7 +154,7 @@ class Invoice(Base):
                 record = collection.find_one({'invoice_number': self._invoice_number})
                 if record:
                     if update:
-                        collection.update_one({'_id': self._id_cart}, {'$set': {'payments': self._payments}})
+                        collection.update_one({'_id': self._id_cart}, {'$set': {'payments': list(self._payments)}})
                         return InsertStatus.UPDATED_SUCCESSFULLY
                     else:
                         self.log.warn('An identical appointment already exists')
@@ -163,7 +163,7 @@ class Invoice(Base):
                     record = collection.insert_one({'patient_id': self._patient.id_cart,
                                                     'service': self._service,
                                                     'amount': self._amount,
-                                                    'payments': self._payments,
+                                                    'payments': list(self._payments),
                                                     'invoice_number': self._invoice_number})
                     self._id_cart = record.inserted_id
                     return InsertStatus.INSERTED_SUCCESSFULLY
@@ -174,7 +174,7 @@ class Invoice(Base):
                         collection.update_one({'_id': self._id_cart}, {'$set': {'patient_id': self._patient.id_cart,
                                                                                 'service': self._service,
                                                                                 'amount': self._amount,
-                                                                                'payments': self._payments,
+                                                                                'payments': list(self._payments),
                                                                                 'invoice_number': self._invoice_number}
                                                                        })
                         return InsertStatus.UPDATED_SUCCESSFULLY

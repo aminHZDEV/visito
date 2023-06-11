@@ -66,6 +66,12 @@ class Payment(Base):
             raise AttributeError('Get the ID first!')
         return self._id_cart == other._id_cart
 
+    def __ne__(self, other):
+        return (not self.__eq__(other))
+
+    def __hash__(self):
+        return hash(self._id_cart)
+
     @staticmethod
     def make_dummy():
         """
