@@ -90,7 +90,7 @@ class Appointment(Base):
                     doctor = Doctor(id_cart=record['doctor_id'])
                     doctor.find_and_update()
                     self._doctor = doctor
-                    self.date = record['date']
+                    self._date = record['date']
                     return FindStatus.RECORD_FOUND
                 else:
                     self.log.warn(f'No records found for id: {self._id_cart}')
@@ -116,7 +116,7 @@ class Appointment(Base):
                                               'date': self._date})
                 if record:
                     if update:
-                        self.log.error('Updating entry based on so many information is not allowed!'
+                        self.log.error('Updating entry based on that many information is not allowed!'
                                        ' Please use ID based update.')
                         return InsertStatus.UPDATE_NOT_ALLOWED
                     else:
