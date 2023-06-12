@@ -9,7 +9,7 @@ Feature: Doctor Management
 
   Scenario Outline: Register a doctor
     When I click on the "Add Doctor" button
-    And I fill in <doctor_name>, <gmc_number>, <field> information
+    And I fill in <doctor_name>, <gmc_number>, <field> information of our new doctor
     And I click on the "Submit Doctor" button
     Then the entry should be added to the "Doctor" collection
 

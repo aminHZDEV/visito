@@ -9,7 +9,7 @@ Feature: Admin Management
 
   Scenario Outline: Register an administrator
     When I click on the "Add Admin" button
-    And I fill in <administrator_name>, <username>, <password> information
+    And I fill in <administrator_name>, <username>, <password> information of our new admin
     And I click on the "Submit Admin" button
     Then the entry should be added to the "Admin" collection
 

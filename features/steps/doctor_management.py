@@ -40,7 +40,7 @@ def step_impl(context):
     logger.log.info('*a pop-up appears asking for administrator information*')
 
 
-@step("I fill in (?P<doctor_name>.+), (?P<gmc_number>.+), (?P<field>.+) information")
+@step("I fill in (?P<doctor_name>.+), (?P<gmc_number>.+), (?P<field>.+) information of our new doctor")
 def step_impl(context, doctor_name, gmc_number, field):
     """
     :type context: behave.runner.Context
