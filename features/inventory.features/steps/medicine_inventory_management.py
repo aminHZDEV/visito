@@ -20,14 +20,6 @@ database_handler = Base()
 logger = MyLog()
 
 
-@given("I am logged in as an administrator")
-def step_impl(context):
-    """
-    :type context: behave.runner.Context
-    """
-    logger.log.info('You are logged in as an administrator!')
-
-
 @step('I am in the "Inventory" section')
 def step_impl(context):
     """
@@ -67,7 +59,7 @@ def step_impl(context, quantity):
     logger.log.info(f'Added {quantity} items. total: {context.my_medicine.quantity}.')
 
 
-@step('I click on the "Add" button')
+@step('I click on the "Add Item" button')
 def step_impl(context):
     """
     :type context: behave.runner.Context
@@ -96,7 +88,7 @@ def step_impl(context):
                     f'\tQuantity: {current_record["quantity"]}')
 
 
-@when("I look at the existing entries")
+@when("I look at the existing medications")
 def step_impl(context):
     """
     :type context: behave.runner.Context
@@ -132,7 +124,7 @@ def step_impl(context, item_name):
         logger.log.info(f'Temporarily created a new entry for {item_name}.')
 
 
-@when('I click on the "Remove" button')
+@when('I click on the "Remove Item" button')
 def step_impl(context):
     """
     :type context: behave.runner.Context

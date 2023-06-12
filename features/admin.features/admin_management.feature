@@ -10,7 +10,7 @@ Feature: Admin Management
   Scenario Outline: Register an administrator
     When I click on the "Add Admin" button
     And I fill in <administrator_name>, <username>, <password> information
-    And I click on the "Submit" button
+    And I click on the "Submit Admin" button
     Then the entry should be added to the "Admin" collection
 
     Examples:
@@ -19,13 +19,13 @@ Feature: Admin Management
       | Richard Turner     | ghijkl   | 123      |
 
   Scenario: Show a list of administrators
-    When I look at the existing entries
+    When I look at the existing admins
     Then I should be able to see a table of existing administrators
 
   Scenario Outline: Update a administrator entry
     Given an admin with username <username> exists
     When I edit <administrator_name>, <password> information of that administrator entry
-    And I click on the "Update" button
+    And I click on the "Update Admins" button
     Then the entry should be updated in the "Admin" collection
 
     Examples:

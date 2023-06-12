@@ -22,14 +22,6 @@ database_handler = Base()
 logger = MyLog()
 
 
-@given("I am logged in as an administrator")
-def step_impl(context):
-    """
-    :type context: behave.runner.Context
-    """
-    logger.log.info('You are logged in as an administrator!')
-
-
 @step('I am in the "Admins" section')
 def step_impl(context):
     """
@@ -61,7 +53,7 @@ def step_impl(context, administrator_name: str, username: str, password: str):
     logger.log.info(f'Information for "{administrator_name}" was entered successfully.')
 
 
-@step('I click on the "Submit" button')
+@step('I click on the "Submit Admin" button')
 def step_impl(context):
     """
     :type context: behave.runner.Context
@@ -100,7 +92,7 @@ def step_impl(context):
         logger.log.error(f'Failed to create a new entry for {context.my_admin.name}')
 
 
-@when("I look at the existing entries")
+@when("I look at the existing admins")
 def step_impl(context):
     """
     :type context: behave.runner.Context
@@ -148,7 +140,7 @@ def step_impl(context, administrator_name, password):
                     f'[name: {administrator_name} | password: {password}]')
 
 
-@step('I click on the "Update" button')
+@step('I click on the "Update Admins" button')
 def step_impl(context):
     """
     :type context: behave.runner.Context

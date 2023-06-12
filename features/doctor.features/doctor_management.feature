@@ -10,7 +10,7 @@ Feature: Doctor Management
   Scenario Outline: Register a doctor
     When I click on the "Add Doctor" button
     And I fill in <doctor_name>, <gmc_number>, <field> information
-    And I click on the "Submit" button
+    And I click on the "Submit Doctor" button
     Then the entry should be added to the "Doctor" collection
 
     Examples:
@@ -19,13 +19,13 @@ Feature: Doctor Management
       | Christopher Turner | 8888888    | Neurologist |
 
   Scenario: Show a list of doctors
-    When I look at the existing entries
+    When I look at the existing doctors
     Then I should be able to see a table of existing doctors
 
   Scenario Outline: Update a doctor entry
     Given a doctor with GMC number <gmc_number> exists
     When I edit <doctor_name>, <field> information of that doctor
-    And I click on the "Update" button
+    And I click on the "Update Doctors" button
     Then the entry should be updated in the "Doctor" collection
 
     Examples:

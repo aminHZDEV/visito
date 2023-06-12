@@ -53,7 +53,7 @@ class Invoice(Base):
 
     @amount.setter
     def amount(self, a):
-        self._amount = a
+        self._amount = int(a)
 
     # Invoice ID accessor
     @property
@@ -116,7 +116,13 @@ class Invoice(Base):
                     self._patient = patient
                     self._service = record['service']
                     self._amount = record['amount']
-                    self._payments = set(record['payments'])
+                    for item in record['payments']:
+                        payment = Payment(id_cart=item)
+                        if payment.find_and_update() == FindStatus.RECORD_FOUND:
+                            self.payments.add(payment)
+                        else:
+                            self.log.error(f'could not find the payment "{item}" '
+                                           f'while updating invoice {self.invoice_number}')
                     return FindStatus.RECORD_FOUND
                 else:
                     self.log.warn(f'No records found for invoice number {self._invoice_number}.')
@@ -130,7 +136,13 @@ class Invoice(Base):
                     self._service = record['service']
                     self._amount = record['amount']
                     self._invoice_number = record['invoice_number']
-                    self._payments = set(record['payments'])
+                    for item in record['payments']:
+                        payment = Payment(id_cart=item)
+                        if payment.find_and_update() == FindStatus.RECORD_FOUND:
+                            self.payments.add(payment)
+                        else:
+                            self.log.error(f'could not find the payment "{item}" '
+                                           f'while updating invoice {self.invoice_number}')
                     return FindStatus.RECORD_FOUND
                 else:
                     self.log.warn(f'No records found for id: {self._id_cart}')
@@ -153,8 +165,13 @@ class Invoice(Base):
             if self.id_cart is None:
                 record = collection.find_one({'invoice_number': self._invoice_number})
                 if record:
+                    self._id_cart = record['_id']
                     if update:
-                        collection.update_one({'_id': self._id_cart}, {'$set': {'payments': list(self._payments)}})
+                        collection.update_one({'_id': self._id_cart}, {'$set':
+                                                                           {'payments': [x.id_cart for x in
+                                                                                         self.payments]
+                                                                            }
+                                                                       })
                         return InsertStatus.UPDATED_SUCCESSFULLY
                     else:
                         self.log.warn('An identical appointment already exists')
@@ -163,7 +180,7 @@ class Invoice(Base):
                     record = collection.insert_one({'patient_id': self._patient.id_cart,
                                                     'service': self._service,
                                                     'amount': self._amount,
-                                                    'payments': list(self._payments),
+                                                    'payments': [x.id_cart for x in self.payments],
                                                     'invoice_number': self._invoice_number})
                     self._id_cart = record.inserted_id
                     return InsertStatus.INSERTED_SUCCESSFULLY
@@ -174,7 +191,8 @@ class Invoice(Base):
                         collection.update_one({'_id': self._id_cart}, {'$set': {'patient_id': self._patient.id_cart,
                                                                                 'service': self._service,
                                                                                 'amount': self._amount,
-                                                                                'payments': list(self._payments),
+                                                                                'payments':
+                                                                                    [x.id_cart for x in self.payments],
                                                                                 'invoice_number': self._invoice_number}
                                                                        })
                         return InsertStatus.UPDATED_SUCCESSFULLY

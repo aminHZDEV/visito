@@ -115,6 +115,7 @@ class Appointment(Base):
                                               'doctor_id': self._doctor.id_cart,
                                               'date': self._date})
                 if record:
+                    self._id_cart = record['_id']
                     if update:
                         self.log.error('Updating entry based on that many information is not allowed!'
                                        ' Please use ID based update.')

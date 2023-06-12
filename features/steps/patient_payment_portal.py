@@ -30,13 +30,13 @@ def step_impl(context, invoice_number):
     :type context: behave.runner.Context
     :type invoice_number: str
     """
-    invoice_record = database_handler.my_db[Invoice.__name__].find_one({'invoice_number': invoice_number})
-    if invoice_record is None:
+    my_invoice = Invoice(invoice_number=invoice_number)
+    if my_invoice.find_and_update() is FindStatus.NO_RECORDS:
         logger.log.info('Creating a dummy entry for given invoice number.')
         dummy = Patient.make_dummy()
-        if not dummy.find_and_update() is FindStatus.RECORD_FOUND:
+        if dummy.find_and_update() is FindStatus.NO_RECORDS:
             if not context.my_patient.add(update=False) is InsertStatus.INSERTED_SUCCESSFULLY:
-                logger.log.error(f'Something weird happened while trying to get the entry for {dummy.name}')
+                logger.log.error(f'Something weird happened while trying to create an entry for {dummy.name}')
 
         invoice_record = database_handler.my_db[Invoice.__name__].insert_one({
             'patient_id': dummy.id_cart,

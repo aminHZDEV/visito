@@ -15,6 +15,7 @@ from behave import given, when, then, step, use_step_matcher
 from app.db.base import Base
 from app.model.patient import Patient
 from app.model.record import Record
+from utils import dummies
 from utils.my_log import MyLog
 from utils.status import FindStatus, InsertStatus
 
@@ -31,30 +32,21 @@ def step_impl(context, token):
     :type token: str
     """
     context.my_records = database_handler.my_db[Record.__name__]
-    current_record = context.my_records.find_one({'token': token})
-    if current_record:
+    my_record = Record(token=token)
+    if my_record.find_and_update() is FindStatus.RECORD_FOUND:
         logger.log.info('Medical record found.')
     else:
         logger.log.info('Creating a dummy medical record for given private token.')
-        dummy = Patient.make_dummy()
-        if not dummy.find_and_update() is FindStatus.RECORD_FOUND:
-            if not context.my_patient.add(update=False) is InsertStatus.INSERTED_SUCCESSFULLY:
-                logger.log.error(f'Something weird happened while trying to get the entry for {dummy.name}')
-
-        current_record = context.my_records.insert_one({
-            'patient_id': dummy.id_cart,
-            'token': token,
-            'info': "You'll die soon mate",
-            'date': datetime.datetime.utcnow().strftime("%Y-%m-%d %I:%M %p")
-        })
-        current_record = context.my_records.find_one({'_id': current_record.inserted_id})
-    patient = Patient(id_cart=current_record['patient_id'])
-    patient.find_and_update()
-    medical_record = Record(patient=patient,
-                            token=current_record['token'],
-                            info=current_record['info'],
-                            date=current_record['date'].strftime("%Y-%m-%d %I:%M %p"))
-    context.my_record = medical_record
+        my_record.patient = dummies.DUMMY_PATIENT
+        my_record.token = token
+        my_record.info = "You'll die soon mate"
+        my_record.date = datetime.datetime.utcnow().strftime("%Y-%m-%d %I:%M %p")
+        if my_record.add(update=False) is InsertStatus.INSERTED_SUCCESSFULLY:
+            logger.log.info('Creation successful.')
+        else:
+            logger.log.error('Could not creat a dummy medical report.')
+            raise RuntimeError('Could not creat a dummy medical report.')
+    context.my_record = my_record
 
 
 @when('I open "Medical Records" section')

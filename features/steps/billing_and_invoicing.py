@@ -13,6 +13,7 @@ from app.db.base import Base
 from app.model.invoice import Invoice
 from app.model.patient import Patient
 from app.model.payment import Payment
+from utils import dummies
 from utils.my_log import MyLog
 from utils.status import FindStatus, InsertStatus
 
@@ -84,14 +85,8 @@ def step_impl(context):
     :type context: behave.runner.Context
     """
     context.my_invoice.invoice_number = f'INV-{context.my_invoices.estimated_document_count():04d}'
-    current_record = context.my_invoices.insert_one({'patient_id': context.my_invoice.patient.id_cart,
-                                                     'service': context.my_invoice.service,
-                                                     'amount': context.my_invoice.amount,
-                                                     'payments': context.my_invoice.payments,
-                                                     'invoice_number': context.my_invoice.invoice_number})
-    context.my_invoice.id_cart = current_record.inserted_id
-    context.my_record = current_record
-    logger.log.info(f'Finalized invoice "{context.my_invoice.invoice_number}" and added to collection.')
+    if context.my_invoice.add(update=False) is InsertStatus.INSERTED_SUCCESSFULLY:
+        logger.log.info(f'Finalized invoice "{context.my_invoice.invoice_number}" and added to collection.')
 
 
 @then("an invoice should be generated for the selected patient")
@@ -117,22 +112,19 @@ def step_impl(context, invoice_number):
     :type context: behave.runner.Context
     :type invoice_number: str
     """
-    invoice_record = context.my_invoices.find_one({'invoice_number': invoice_number})
-    if invoice_record is None:
+    my_invoice = Invoice(invoice_number=invoice_number)
+    if not (my_invoice.find_and_update() is FindStatus.RECORD_FOUND):
         logger.log.info('Creating a dummy entry for given invoice number.')
-        dummy = Patient.make_dummy()
-        if not dummy.find_and_update() is FindStatus.RECORD_FOUND:
-            if not context.my_patient.add(update=False) is InsertStatus.INSERTED_SUCCESSFULLY:
-                logger.log.error(f'Something weird happened while trying to get the entry for {dummy.name}')
-
-        invoice_record = context.my_invoices.insert_one({
-            'patient_id': dummy.id_cart,
-            'service': 'Dummy Service',
-            'amount': 100,
-            'payments': [],
-            'invoice_number': invoice_number})
-        invoice_record = context.my_invoices.find_one({'_id': invoice_record.inserted_id})
-    context.my_invoice = invoice_record
+        my_invoice = Invoice(dummies.DUMMY_PATIENT,
+                             'Dummy Service',
+                             amount=100,
+                             invoice_number=invoice_number)
+        if my_invoice.add(update=False) is InsertStatus.INSERTED_SUCCESSFULLY:
+            logger.log.info('Creation successful.')
+        else:
+            logger.log.error('Could not creat a dummy invoice.')
+            raise RuntimeError('Could not creat a dummy invoice.')
+    context.my_invoice = my_invoice
     logger.log.info(f'An entry for {invoice_number} exists.')
 
 
@@ -141,7 +133,7 @@ def step_impl(context):
     """
     :type context: behave.runner.Context
     """
-    logger.log.info(f'Invoice {context.my_invoice["invoice_number"]} selected.')
+    logger.log.info(f'Invoice {context.my_invoice.invoice_number} selected.')
 
 
 @step('I click on the "Track Payments" button')
@@ -149,8 +141,8 @@ def step_impl(context):
     """
     :type context: behave.runner.Context
     """
-    context.my_payments = context.my_invoice['payments']
-    logger.log.info(f'Payment information for {context.my_invoice["invoice_number"]} found.')
+    context.my_payments = context.my_invoice.payments
+    logger.log.info(f'Payment information for {context.my_invoice.invoice_number} found.')
 
 
 @then("payments made by the patient should be displayed for the selected invoice")
@@ -158,13 +150,12 @@ def step_impl(context):
     """
     :type context: behave.runner.Context
     """
-    patient_record = database_handler.my_db[Patient.__name__].find_one({'_id': context.my_invoice["patient_id"]})
     if context.my_payments:
         table = '\t|            Date            |     Amount     |'
         for item in context.my_payments:
-            current_payment = database_handler.my_db[Payment.__name__].find_one({'_id': item})
-            table += f'\n\t|{current_payment["date"]:    %Y-%m-%d %I:%M %p     }|{current_payment["amount"]: ^16}|'
-        logger.log.info(f'List of payments made by {patient_record["name"]} for {context.my_invoice["invoice_number"]}:'
+            table += f'\n\t|{item.date:    %Y-%m-%d %I:%M %p     }|{item.amount: ^16}|'
+        logger.log.info(f'List of payments made by {context.my_invoice.patient.name} '
+                        f'for {context.my_invoice.invoice_number}:'
                         f'\n{table}')
     else:
-        logger.log.info(f'There are no payment records for patient {patient_record["name"]}.')
+        logger.log.info(f'There are no payment records for patient {context.my_invoice.patient.name}.')

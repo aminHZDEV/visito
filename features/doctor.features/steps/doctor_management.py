@@ -21,14 +21,6 @@ database_handler = Base()
 logger = MyLog()
 
 
-@given("I am logged in as an administrator")
-def step_impl(context):
-    """
-    :type context: behave.runner.Context
-    """
-    logger.log.info('You are logged in as an administrator!')
-
-
 @step('I am in the "Doctors" section')
 def step_impl(context):
     """
@@ -60,7 +52,7 @@ def step_impl(context, doctor_name, gmc_number, field):
     logger.log.info(f'Information for "{doctor_name}" was entered successfully.')
 
 
-@step('I click on the "Submit" button')
+@step('I click on the "Submit Doctor" button')
 def step_impl(context):
     """
     :type context: behave.runner.Context
@@ -100,7 +92,7 @@ def step_impl(context):
         logger.log.error(f'Failed to create a new entry for Dr. {context.my_doctor.name}')
 
 
-@when("I look at the existing entries")
+@when("I look at the existing doctors")
 def step_impl(context):
     """
     :type context: behave.runner.Context
@@ -115,8 +107,10 @@ def step_impl(context):
     """
     table = '\t|      Doctor Name      |   GMC Number   |        Field        |'
     for item in context.my_doctors.find({}):
-        table += f'\n\t|{item["name"]: ^23}|{item["gmc_number"]: ^16}|{item["field"]: ^21}|'
-
+        try:
+            table += f'\n\t|{item["name"]: ^23}|{item["gmc_number"]: ^16}|{item["field"]: ^21}|'
+        except KeyError as e:
+            table += f'\n\t|{item["name"]: ^23}|     *sigh*     |        ARRGH        |'
     logger.log.info(f'A list of existing admins is shown:\n{table}')
 
 
@@ -148,7 +142,7 @@ def step_impl(context, doctor_name, field):
                     f'[name: {doctor_name} | field: {field}]')
 
 
-@step('I click on the "Update" button')
+@step('I click on the "Update Doctors" button')
 def step_impl(context):
     """
     :type context: behave.runner.Context

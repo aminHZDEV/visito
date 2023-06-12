@@ -10,7 +10,7 @@ Feature: Medicine Inventory Management
   Scenario Outline: Add an item to the medicine inventory
     When I enter the item "<item_name>" that I want to add to inventory
     And I enter the quantity "<quantity>" of the item that I want to add to inventory
-    And I click on the "Add" button
+    And I click on the "Add Item" button
     Then the item should be added to the inventory
 
     Examples:
@@ -19,12 +19,12 @@ Feature: Medicine Inventory Management
       | Syringes  | 50       |
 
   Scenario: Show a list of medicines
-    When I look at the existing entries
+    When I look at the existing medications
     Then I should be able to see a table of existing medications
 
   Scenario Outline: Remove an item from the medicine inventory
     Given An entry for "<item_name>" exists
-    When I click on the "Remove" button
+    When I click on the "Remove Item" button
     Then the item should be removed from the inventory
 
     Examples:
