@@ -88,6 +88,9 @@ class Patient(Base):
         :param update: If it's True updates the database entry if it already exists
         :return: Returns 1 if operation was successful and -1 if it doesn't find the record
         """
+        if not (self._name and self._ssid):
+            self.log.error('Incomplete information! Please first fill the object.')
+            return InsertStatus.INCOMPLETE_INFO
         try:
             collection = self.my_db[self.__class__.__name__]
             if self.id_cart == -1:
