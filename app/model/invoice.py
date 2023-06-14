@@ -174,7 +174,7 @@ class Invoice(Base):
                                                                        })
                         return InsertStatus.UPDATED_SUCCESSFULLY
                     else:
-                        self.log.warn('An identical appointment already exists')
+                        self.log.warn('An identical invoice already exists')
                         return InsertStatus.DUPLICATE_ENTRY
                 else:
                     record = collection.insert_one({'patient_id': self._patient.id_cart,
