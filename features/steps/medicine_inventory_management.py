@@ -14,6 +14,8 @@ from app.model.medicine import Medicine
 import names
 import random
 
+from utils.status import FindStatus, InsertStatus
+
 use_step_matcher("re")
 
 database_handler = Base()
@@ -36,15 +38,14 @@ def step_impl(context, item_name):
     :type context: behave.runner.Context
     :type item_name: str
     """
-    current_record = context.my_inventory.find_one({'name': item_name})
-    if current_record:
+    my_medicine = Medicine(name=item_name)
+    if my_medicine.find_and_update() is FindStatus.RECORD_FOUND:
         context.already_exists = True
-        context.my_medicine = Medicine(name=item_name, quantity=current_record['quantity'], id_cart=current_record['_id'])
         logger.log.info(f'An entry for {item_name} found.')
     else:
         context.already_exists = False
-        context.my_medicine = Medicine(name=item_name)
-        logger.log.info(f'A new entry for {item_name} created.')
+        logger.log.info(f'A new entry for {item_name} will be created.')
+    context.my_medicine = my_medicine
 
 
 @step('I enter the quantity "(?P<quantity>.+)" of the item that I want to add to inventory')
@@ -53,9 +54,7 @@ def step_impl(context, quantity):
     :type context: behave.runner.Context
     :type quantity: str
     """
-    quantity = int(quantity)
-    context.my_quantity = quantity
-    context.my_medicine.increase_quantity(quantity)
+    context.my_medicine.increase_quantity(int(quantity))
     logger.log.info(f'Added {quantity} items. total: {context.my_medicine.quantity}.')
 
 
@@ -65,13 +64,15 @@ def step_impl(context):
     :type context: behave.runner.Context
     """
     if context.already_exists:
-        context.my_inventory.update_one({'_id': context.my_medicine.id_cart},
-                                        {'$inc': {'quantity': context.my_quantity}})
+        if context.my_medicine.add(update=True) is InsertStatus.UPDATED_SUCCESSFULLY:
+            logger.log.info('Item Updated in inventory.')
+        else:
+            logger.log.warn("Couldn't update the item's record.")
     else:
-        current_record = context.my_inventory.insert_one({'name': context.my_medicine.name,
-                                                          'quantity': context.my_medicine.quantity})
-        context.my_medicine.id_cart = current_record.inserted_id
-    logger.log.info('Item added to inventory.')
+        if context.my_medicine.add(update=False) is InsertStatus.INSERTED_SUCCESSFULLY:
+            logger.log.info('Item added to inventory.')
+        else:
+            logger.log.warn("Couldn't add the item.")
 
 
 @then("the item should be added to the inventory")
