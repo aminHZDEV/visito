@@ -27,6 +27,7 @@ try:
             ]
         )
         from behave import __main__ as behave_executable
+
         behave_executable.main(None)
 
     eel.init(log.dotenv_values["EEL_INIT"])

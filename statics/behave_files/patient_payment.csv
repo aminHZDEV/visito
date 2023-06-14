@@ -1,0 +1,5 @@
+reason,payment_method,time_slot,date,amount,confirmation
+check-up ,credit card , 9:00 am , 15 June 2023 , $50 , SMS
+vaccination , debit card , 10:30 am , 16 June 2023 , $40 , email
+referral , cash , 2:00 pm , 17 June 2023 , $30 , print
+prescription renewal , cheque , 4:15 pm , 18 June 2023 , $20 , SMS

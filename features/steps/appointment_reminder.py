@@ -20,7 +20,8 @@ use_step_matcher("re")
 base = Base()
 log = MyLog()
 
-@given('the system wants to send an appointment reminder')
+
+@given("the system wants to send an appointment reminder")
 def step_system_wants_to_send_appointment_reminder(context):
     # Perform necessary actions here
     name = names.get_full_name()
@@ -29,7 +30,8 @@ def step_system_wants_to_send_appointment_reminder(context):
     context.patient = patient
     log.log.info(f"the doctor examines the patient")
 
-@given('the system has (?P<appointment_details>.+)')
+
+@given("the system has (?P<appointment_details>.+)")
 def step_system_has_appointment_details(context, appointment_details):
     # Retrieve the appointment details and perform necessary actions here
     name = names.get_full_name()
@@ -39,10 +41,12 @@ def step_system_has_appointment_details(context, appointment_details):
     context.appointment_details = appointment_details
     log.log.info(f"the system has {appointment_details}")
 
-@when('the system generates an appointment reminder message')
+
+@when("the system generates an appointment reminder message")
 def step_system_generates_appointment_reminder_message(context):
     # Generate the appointment reminder message and perform necessary actions here
     log.log.info(f"the system generates an appointment reminder message")
+
 
 @then("the system should send the message to the patient's (?P<contact_details>.+)")
 def step_system_sends_message_to_patient_contact_details(context, contact_details):
@@ -60,6 +64,10 @@ def step_system_sends_message_to_patient_contact_details(context, contact_detail
     assert context.reminder.reminder_id == search_reminder["_id"]
     assert context.reminder.doctor_id == search_reminder["doctor_id"]
     assert context.reminder.patient_id == search_reminder["patient_id"]
-    assert context.reminder.appointment_details == search_reminder["appointment_details"]
+    assert (
+        context.reminder.appointment_details == search_reminder["appointment_details"]
+    )
     assert context.reminder.contact_details == search_reminder["contact_details"]
-    log.log.info(f"the system should send the message to the patient's {contact_details}")
+    log.log.info(
+        f"the system should send the message to the patient's {contact_details}"
+    )

@@ -8,7 +8,7 @@ A local app to visit doctor
   * MONGO_URL="mongodb://localhost:27017/"
   * DB_NAME="mydatabase"
   * LOG_FILE="app.log"
-  * LOG_MODE="w"
+  * LOG_MODE="a"
   * LOG_FORMAT="%(name)s - %(levelname)s - %(message)s"
   * MAIN_VERTICAL="720"
   * MAIN_HORIZONTAL="480"

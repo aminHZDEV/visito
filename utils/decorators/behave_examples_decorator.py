@@ -24,6 +24,8 @@ def insert_examples():
                         else:
                             for j in args[1]:
                                 for i in j.examples:
+                                    print("mlist : ", mlist)
+                                    print(i.table.headings, " | ", i.table.headings == mlist)
                                     if i.table.headings == mlist:
                                         i.table.rows.append(
                                             Row(

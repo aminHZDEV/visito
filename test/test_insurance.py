@@ -10,7 +10,9 @@ titles, testcases = insert_testcases("insurance_verification.csv")
 
 @pytest.mark.parametrize(titles, testcases)
 def test_reminder_add(insurance_information, expected):
-    insurance_verification = InsuranceVerification(insurance_information=insurance_information)
+    insurance_verification = InsuranceVerification(
+        insurance_information=insurance_information
+    )
     assert insurance_verification.add() != expected
     log.log.info(
         f"pytest insruance verification add function pass name :  {insurance_information} != expected {expected} \n"

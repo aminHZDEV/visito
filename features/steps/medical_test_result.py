@@ -51,7 +51,9 @@ def step_impl(context, results):
     )
     test_results_id = test_results.add()
     context.test_results = test_results
-    search_test_results = base.my_db[TestResults.__name__].find_one({"_id": test_results_id})
+    search_test_results = base.my_db[TestResults.__name__].find_one(
+        {"_id": test_results_id}
+    )
     assert context.test_results.test_result_id == search_test_results["_id"]
     assert context.test_results.doctor_id == search_test_results["doctor_id"]
     assert context.test_results.patient_id == search_test_results["patient_id"]

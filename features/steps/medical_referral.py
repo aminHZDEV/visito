@@ -21,7 +21,7 @@ base = Base()
 log = MyLog()
 
 
-@given('the doctor recommends a referral to (?P<specialist>.+)')
+@given("the doctor recommends a referral to (?P<specialist>.+)")
 def step_impl(context, specialist):
     name = names.get_full_name()
     patient = Patient(name=name)
@@ -31,7 +31,7 @@ def step_impl(context, specialist):
     log.log.info(f"the doctor recommends a referral to {specialist}")
 
 
-@when('the system generates a (?P<referral_request>.+)')
+@when("the system generates a (?P<referral_request>.+)")
 def step_impl(context, referral_request):
     name = names.get_full_name()
     doctor = Doctor(name=name)
@@ -40,7 +40,8 @@ def step_impl(context, referral_request):
     context.referral_request = referral_request
     log.log.info(f"the system generates a {referral_request}")
 
-@then('the system should send the referral request to the (?P<specialist_office>.+)')
+
+@then("the system should send the referral request to the (?P<specialist_office>.+)")
 def step_impl(context, specialist_office):
     context.specialist_office = specialist_office
     reference = Reference(
@@ -59,8 +60,11 @@ def step_impl(context, specialist_office):
     assert context.reference.referral_request == search_reference["referral_request"]
     assert context.reference.specialist_office == search_reference["specialist_office"]
     assert context.reference.specialist == search_reference["specialist"]
-    log.log.info(f"the system should send the referral request to the {specialist_office}")
+    log.log.info(
+        f"the system should send the referral request to the {specialist_office}"
+    )
 
-@then('the system should notify the patient of the referral request')
+
+@then("the system should notify the patient of the referral request")
 def step_impl(context):
     log.log.info(f"the system should notify the patient of the referral request")

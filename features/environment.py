@@ -16,7 +16,7 @@ def before_feature(context, feature):
 
 
 def before_scenario(context, scenario):
-    pass
+    context.patchers = []
 
 
 def before_step(context, step):
@@ -36,7 +36,8 @@ def after_feature(context, feature):
 
 
 def after_scenario(context, scenario):
-    pass
+    for patcher in context.patchers:
+        patcher.stop()
 
 
 def after_step(context, step):
