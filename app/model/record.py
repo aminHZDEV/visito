@@ -80,6 +80,9 @@ class Record(Base):
         try:
             collection = self.my_db[self.__class__.__name__]
             if self.id_cart is None:
+                if self._token == "":
+                    self.log.error('Insufficient info was given for record lookup')
+                    return FindStatus.INSUFFICIENT_INFO
                 record = collection.find_one({'token': self._token})
                 if record:
                     patient = Patient(id_cart=record['patient_id'])
@@ -121,7 +124,7 @@ class Record(Base):
         try:
             collection = self.my_db[self.__class__.__name__]
             if self.id_cart is None:
-                record = collection.find_one({'username': self._token})
+                record = collection.find_one({'token': self._token})
                 if record:
                     self._id_cart = record['_id']
                     if update:

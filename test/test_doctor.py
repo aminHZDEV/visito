@@ -11,8 +11,8 @@ params_add = \
      (Doctor(), InsertStatus.INCOMPLETE_INFO),
      (Doctor(name='Doctor_1', gmc_number='7777777', field='Orthopedist', id_cart=FAKE_DB['Doctor'].find_one({})['_id']), InsertStatus.DUPLICATE_ID)]
 
-params_find = [(Doctor(name='Doctor_1'), FindStatus.RECORD_FOUND),
-               (Doctor(name='Doctor_10'), FindStatus.NO_RECORDS),
+params_find = [(Doctor(gmc_number='GMC_1'), FindStatus.RECORD_FOUND),
+               (Doctor(gmc_number='NonExistentGMC'), FindStatus.NO_RECORDS),
                (Doctor(id_cart=FAKE_DB['Doctor'].find_one({})['_id']), FindStatus.RECORD_FOUND),
                (Doctor(id_cart='InvalidID'), FindStatus.NO_RECORDS)]
 
