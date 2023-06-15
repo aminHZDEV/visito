@@ -5,13 +5,16 @@ from utils.my_log import MyLog
 
 log = MyLog()
 
-titles, testcases = insert_testcases("doctor_test_case.csv")
+titles, testcases = insert_testcases("bill_test_case.csv")
 
 
 @pytest.mark.parametrize(titles, testcases)
-def test_bill_generation(name, expected):
-    bill = Bill(name=name)
+def test_bill_generation(duration ,amount , expected):
+    bill = Bill(
+           duration=duration,
+           amount=amount,
+        )
     assert bill.add() != expected
     log.log.info(
-        f"pytest doctor add function pass name :  {name} != expected {expected} \n"
+        f"pytest generate bill  pass != expected {expected} \n"
     )

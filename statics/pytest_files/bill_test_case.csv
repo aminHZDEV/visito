@@ -1,4 +1,4 @@
-name, expected
-'doctor', -1
-'asghar', -1
-'mamad', -1
+duration , amount , expected
+50 , 100 , -1
+10 , 75  , -1
+30 , 250 , -1
