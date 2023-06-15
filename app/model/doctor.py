@@ -7,30 +7,12 @@ __maintainer__ = ""
 __email__ = "amin.hasan.zarei@gmail.com"
 __status__ = "Production"
 
-from app.db.base import Base
+from app.model.user import User
 
 
-class Doctor(Base):
+class Doctor(User):
     def __init__(self, name: str = "", id_cart: int = -1):
-        super().__init__()
-        self._name = name
-        self._id_cart = id_cart
-
-    @property
-    def name(self):
-        return self._name
-
-    @name.setter
-    def name(self, a):
-        self._name = a
-
-    @property
-    def id_cart(self):
-        return self._id_cart
-
-    @id_cart.setter
-    def id_cart(self, a):
-        self._id_cart = a
+        super().__init__(name=name, id_cart=id_cart)
 
     def add(self) -> int:
         """

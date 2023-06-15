@@ -7,10 +7,10 @@ __maintainer__ = ""
 __email__ = "amin.hasan.zarei@gmail.com"
 __status__ = "Production"
 
-from app.db.base import Base
+from app.model.user import User
 
 
-class Patient(Base):
+class Patient(User):
     def __init__(
         self,
         name: str = "",
@@ -20,21 +20,11 @@ class Patient(Base):
         phonenumber: str = "",
         email: str = "",
     ):
-        super().__init__()
-        self._name = name
-        self._id_cart = id_cart
+        super().__init__(name=name, id_cart=id_cart)
         self._reason = reason
         self._payment_method = payment_method
         self._phonenumber = phonenumber
         self._email = email
-
-    @property
-    def name(self):
-        return self._name
-
-    @name.setter
-    def name(self, a):
-        self._name = a
 
     @property
     def email(self):
@@ -67,14 +57,6 @@ class Patient(Base):
     @payment_method.setter
     def payment_method(self, a):
         self._payment_method = a
-
-    @property
-    def id_cart(self):
-        return self._id_cart
-
-    @id_cart.setter
-    def id_cart(self, a):
-        self._id_cart = a
 
     def send(self, entity: object = None, message: str = "") -> bool:
         """
