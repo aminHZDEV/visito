@@ -1,0 +1,4 @@
+patient_id, height, weight ,  expected
+1, 167, 50, False
+2, 177, 56 , False
+3, 166,66, False
