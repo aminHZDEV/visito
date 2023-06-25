@@ -7,7 +7,6 @@ __maintainer__ = ""
 __email__ = "kaveh.teymoury@gmail.com"
 __status__ = "Production"
 
-import datetime
 from behave import given, when, then, step, use_step_matcher
 
 from app.db.base import Base

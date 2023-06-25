@@ -1,3 +1,14 @@
+__author__ = "KTeymoury"
+__copyright__ = "Copyright 2023"
+__credits__ = ["Mehdi Roudaki", "Hamid Moradi"]
+__license__ = "MIT"
+__version__ = "1.0.0"
+__maintainer__ = ""
+__email__ = "kaveh.teymoury@gmail.com"
+__status__ = "Production"
+
+import datetime
+
 from app.model.administrator import Administrator
 from app.model.appointment import Appointment
 from app.model.doctor import Doctor
@@ -7,7 +18,6 @@ from app.model.patient import Patient
 from app.model.payment import Payment
 from app.model.record import Record
 from utils.status import InsertStatus
-import datetime
 
 # A flag used to check the state of dummies
 is_initiated = False
@@ -34,25 +44,25 @@ def initiate():
     global DUMMY_PATIENT
     global DUMMY_RECORD
     global DUMMY_PAYMENT
-    
+
     # Patient
     DUMMY_PATIENT = Patient.make_dummy()
     status = DUMMY_PATIENT.add(update=False)
     if not (status is InsertStatus.INSERTED_SUCCESSFULLY or status is InsertStatus.DUPLICATE_ENTRY):
         raise RuntimeError(f'Something went wrong while creating dummy patient. Status: {status}')
-    
+
     # Doctor
     DUMMY_DOCTOR = Doctor.make_dummy()
     status = DUMMY_DOCTOR.add(update=False)
     if not (status is InsertStatus.INSERTED_SUCCESSFULLY or status is InsertStatus.DUPLICATE_ENTRY):
         raise RuntimeError(f'Something went wrong while creating dummy doctor. Status: {status}')
-    
+
     # Admin
     DUMMY_ADMINISTRATOR = Administrator.make_dummy()
     status = DUMMY_ADMINISTRATOR.add(update=False)
     if not (status is InsertStatus.INSERTED_SUCCESSFULLY or status is InsertStatus.DUPLICATE_ENTRY):
         raise RuntimeError(f'Something went wrong while creating dummy administrator. Status: {status}')
-    
+
     # Medicine
     DUMMY_MEDICINE = Medicine.make_dummy()
     status = DUMMY_MEDICINE.add(update=False)

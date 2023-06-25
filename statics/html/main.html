@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Visito</title>
-        <script type='text/javascript' src='/eel.js'></script>
-        <link rel="stylesheet" href="./css/style.css" />
-    </head>
-    <body id="main">
-    </body>
+<head>
+    <title>Visito</title>
+    <script src='/eel.js' type='text/javascript'></script>
+    <link href="./css/style.css" rel="stylesheet"/>
+</head>
+<body id="main">
+</body>
 <script type='text/javascript'>
-        async function onLoad(){
-            behave = await eel.load_behave()();
-            for (let i = 0; i < behave.length; i++) {
-                document.getElementById("main").innerHTML += behave[i] + "<br>";
-            }
-
+    async function onLoad() {
+        behave = await eel.load_behave()();
+        for (let i = 0; i < behave.length; i++) {
+            document.getElementById("main").innerHTML += behave[i] + "<br>";
         }
-        onLoad();
-        </script>
+
+    }
+
+    onLoad();
+</script>
 </html>

@@ -1,1 +1,62 @@
-[{"patient_id": {"$oid": "648893df105dd339abb98467"}, "service": "Service_1", "amount": 500, "payments": [{"$oid": "648893df105dd339abb9846f"}, {"$oid": "648893df105dd339abb98471"}, {"$oid": "648893df105dd339abb98473"}], "invoice_number": "INV-0001", "_id": {"$oid": "648893df105dd339abb98477"}}, {"patient_id": {"$oid": "648893df105dd339abb98468"}, "service": "Service_2", "amount": 500, "payments": [{"$oid": "648893df105dd339abb98470"}, {"$oid": "648893df105dd339abb98472"}, {"$oid": "648893df105dd339abb98474"}], "invoice_number": "INV-0002", "_id": {"$oid": "648893df105dd339abb98478"}}, {"patient_id": {"$oid": "6488a6e600f30d4d1ea37761"}, "service": "Dummification", "amount": 999, "payments": [{"$oid": "6488a6e600f30d4d1ea37767"}], "invoice_number": "INV-XXXX", "_id": {"$oid": "6488a6e600f30d4d1ea37768"}}]
+[
+  {
+    "patient_id": {
+      "$oid": "648893df105dd339abb98467"
+    },
+    "service": "Service_1",
+    "amount": 500,
+    "payments": [
+      {
+        "$oid": "648893df105dd339abb9846f"
+      },
+      {
+        "$oid": "648893df105dd339abb98471"
+      },
+      {
+        "$oid": "648893df105dd339abb98473"
+      }
+    ],
+    "invoice_number": "INV-0001",
+    "_id": {
+      "$oid": "648893df105dd339abb98477"
+    }
+  },
+  {
+    "patient_id": {
+      "$oid": "648893df105dd339abb98468"
+    },
+    "service": "Service_2",
+    "amount": 500,
+    "payments": [
+      {
+        "$oid": "648893df105dd339abb98470"
+      },
+      {
+        "$oid": "648893df105dd339abb98472"
+      },
+      {
+        "$oid": "648893df105dd339abb98474"
+      }
+    ],
+    "invoice_number": "INV-0002",
+    "_id": {
+      "$oid": "648893df105dd339abb98478"
+    }
+  },
+  {
+    "patient_id": {
+      "$oid": "6488a6e600f30d4d1ea37761"
+    },
+    "service": "Dummification",
+    "amount": 999,
+    "payments": [
+      {
+        "$oid": "6488a6e600f30d4d1ea37767"
+      }
+    ],
+    "invoice_number": "INV-XXXX",
+    "_id": {
+      "$oid": "6488a6e600f30d4d1ea37768"
+    }
+  }
+]

@@ -7,7 +7,6 @@ __maintainer__ = ""
 __email__ = "kaveh.teymoury@gmail.com"
 __status__ = "Production"
 
-
 from app.db.base import Base
 from utils.status import FindStatus, InsertStatus
 

@@ -1,1 +1,28 @@
-[{"patient_id": {"$oid": "648893df105dd339abb98467"}, "token": "Token_1", "info": "Info_1", "date": {"$date": "2023-01-01T00:00:00Z"}, "_id": {"$oid": "648893df105dd339abb98479"}}, {"patient_id": {"$oid": "648893df105dd339abb98468"}, "token": "Token_2", "info": "Info_2", "date": {"$date": "2023-03-01T00:00:00Z"}, "_id": {"$oid": "648893df105dd339abb9847a"}}]
+[
+  {
+    "patient_id": {
+      "$oid": "648893df105dd339abb98467"
+    },
+    "token": "Token_1",
+    "info": "Info_1",
+    "date": {
+      "$date": "2023-01-01T00:00:00Z"
+    },
+    "_id": {
+      "$oid": "648893df105dd339abb98479"
+    }
+  },
+  {
+    "patient_id": {
+      "$oid": "648893df105dd339abb98468"
+    },
+    "token": "Token_2",
+    "info": "Info_2",
+    "date": {
+      "$date": "2023-03-01T00:00:00Z"
+    },
+    "_id": {
+      "$oid": "648893df105dd339abb9847a"
+    }
+  }
+]

@@ -1,14 +1,15 @@
 import pytest
-from utils.fakes import FAKE_DB
 
 from app.model.patient import Patient
+from utils.fakes import FAKE_DB
 from utils.status import InsertStatus, FindStatus
 
 params_add = \
     [(Patient(name='Patient_3', ssid='SSID_3'), InsertStatus.INSERTED_SUCCESSFULLY),
      (Patient(name='Patient_4', ssid='SSID_1'), InsertStatus.DUPLICATE_ENTRY),
      (Patient(), InsertStatus.INCOMPLETE_INFO),
-     (Patient(name='Patient_5', ssid='SSID_5', id_cart=FAKE_DB['Patient'].find_one({})['_id']), InsertStatus.DUPLICATE_ID)]
+     (Patient(name='Patient_5', ssid='SSID_5', id_cart=FAKE_DB['Patient'].find_one({})['_id']),
+      InsertStatus.DUPLICATE_ID)]
 
 params_find = [(Patient(name='Patient_1', ssid='SSID_1'), FindStatus.RECORD_FOUND),
                (Patient(ssid='SSID_10'), FindStatus.NO_RECORDS),

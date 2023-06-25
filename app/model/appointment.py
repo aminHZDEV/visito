@@ -9,10 +9,10 @@ __status__ = "Production"
 
 import datetime
 
+from app.db.base import Base
 from app.model.doctor import Doctor
 from app.model.patient import Patient
 from utils.status import FindStatus, InsertStatus
-from app.db.base import Base
 
 
 class Appointment(Base):

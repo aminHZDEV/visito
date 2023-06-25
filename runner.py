@@ -9,6 +9,7 @@ __status__ = "Production"
 
 import dotenv
 import eel
+
 from utils.my_log import MyLog
 
 try:
@@ -17,9 +18,11 @@ try:
     log = MyLog()
     if __name__ == "__main__":
         from behave import __main__ as behave_executable
+
         behave_executable.main(None)
 
     eel.init(de["EEL_INIT"])
+
 
     @eel.expose
     def load_behave():

@@ -7,8 +7,8 @@ __maintainer__ = ""
 __email__ = "sm_roudaki@comp.iust.ac.ir"
 __status__ = "Production"
 
-import names
 import random
+
 from behave import given, when, then, step, use_step_matcher
 
 from app.db.base import Base

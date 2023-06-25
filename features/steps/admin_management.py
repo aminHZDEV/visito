@@ -7,13 +7,14 @@ __maintainer__ = ""
 __email__ = "sm_roudaki@comp.iust.ac.ir"
 __status__ = "Production"
 
-from behave import given, when, then, step, use_step_matcher
-from utils.my_log import MyLog
-from app.db.base import Base
-from app.model.administrator import Administrator
-import names
 import random
 
+import names
+from behave import given, when, then, step, use_step_matcher
+
+from app.db.base import Base
+from app.model.administrator import Administrator
+from utils.my_log import MyLog
 from utils.status import InsertStatus, FindStatus
 
 use_step_matcher("re")
@@ -149,7 +150,6 @@ def step_impl(context):
         logger.log.info('Update was successful!')
     else:
         logger.log.info('Failed to update entry!')
-
 
 
 @then('the entry should be updated in the "Admin" collection')

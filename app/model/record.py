@@ -10,7 +10,6 @@ __status__ = "Production"
 import datetime
 
 from app.db.base import Base
-from app.model.doctor import Doctor
 from app.model.patient import Patient
 from utils.status import InsertStatus, FindStatus
 
@@ -128,7 +127,7 @@ class Record(Base):
                 if record:
                     self._id_cart = record['_id']
                     if update:
-                        collection.update_one({'_id': self._id_cart}, {'$set': {'info': self._info,}})
+                        collection.update_one({'_id': self._id_cart}, {'$set': {'info': self._info}})
                         return InsertStatus.UPDATED_SUCCESSFULLY
                     else:
                         self.log.warn(f'An entry for token {self._token} already exists. '

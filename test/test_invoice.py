@@ -1,17 +1,20 @@
 import pytest
-from utils.fakes import FAKE_DB
 
 from app.model.invoice import Invoice
 from app.model.patient import Patient
+from utils.fakes import FAKE_DB
 from utils.status import InsertStatus, FindStatus
 
 _valid_patient = Patient(name='Patient_1', ssid='SSID_1')
 _valid_patient.find_and_update()
 
-params_add = [(Invoice(patient=_valid_patient, service='Service_4', amount=80, invoice_number='INV-0003'), InsertStatus.INSERTED_SUCCESSFULLY),
-              (Invoice(patient=_valid_patient, service='Service_4', amount=80, invoice_number='INV-0001'), InsertStatus.DUPLICATE_ENTRY),
+params_add = [(Invoice(patient=_valid_patient, service='Service_4', amount=80, invoice_number='INV-0003'),
+               InsertStatus.INSERTED_SUCCESSFULLY),
+              (Invoice(patient=_valid_patient, service='Service_4', amount=80, invoice_number='INV-0001'),
+               InsertStatus.DUPLICATE_ENTRY),
               (Invoice(), InsertStatus.INCOMPLETE_INFO),
-              (Invoice(patient=_valid_patient, service='Service_4', amount=80, invoice_number='INV-0005', id_cart=FAKE_DB['Invoice'].find_one({})['_id']), InsertStatus.DUPLICATE_ID)]
+              (Invoice(patient=_valid_patient, service='Service_4', amount=80, invoice_number='INV-0005',
+                       id_cart=FAKE_DB['Invoice'].find_one({})['_id']), InsertStatus.DUPLICATE_ID)]
 
 params_find = [(Invoice(invoice_number='INV-0001'), FindStatus.RECORD_FOUND),
                (Invoice(invoice_number='NonExistent'), FindStatus.NO_RECORDS),

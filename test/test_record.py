@@ -1,17 +1,20 @@
 import pytest
-from utils.fakes import FAKE_DB
 
-from app.model.record import Record
 from app.model.patient import Patient
+from app.model.record import Record
+from utils.fakes import FAKE_DB
 from utils.status import InsertStatus, FindStatus
 
 _valid_patient = Patient(name='Patient_1', ssid='SSID_1')
 _valid_patient.find_and_update()
 
-params_add = [(Record(patient=_valid_patient, token='123456789', info='Some info', date='2023-06-14 10:00 AM'), InsertStatus.INSERTED_SUCCESSFULLY),
-              (Record(patient=_valid_patient, token='123456789', info='Some info', date='2023-06-14 10:00 AM'), InsertStatus.DUPLICATE_ENTRY),
+params_add = [(Record(patient=_valid_patient, token='123456789', info='Some info', date='2023-06-14 10:00 AM'),
+               InsertStatus.INSERTED_SUCCESSFULLY),
+              (Record(patient=_valid_patient, token='123456789', info='Some info', date='2023-06-14 10:00 AM'),
+               InsertStatus.DUPLICATE_ENTRY),
               (Record(), InsertStatus.INCOMPLETE_INFO),
-              (Record(patient=_valid_patient, token='123456789', info='Some info', date='2023-06-14 10:00 AM', id_cart=FAKE_DB['Record'].find_one({})['_id']), InsertStatus.DUPLICATE_ID)]
+              (Record(patient=_valid_patient, token='123456789', info='Some info', date='2023-06-14 10:00 AM',
+                      id_cart=FAKE_DB['Record'].find_one({})['_id']), InsertStatus.DUPLICATE_ID)]
 
 params_find = [(Record(token='123456789'), FindStatus.RECORD_FOUND),
                (Record(token='NonExistent'), FindStatus.NO_RECORDS),

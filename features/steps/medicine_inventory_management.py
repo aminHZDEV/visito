@@ -8,12 +8,10 @@ __email__ = "kaveh.teymoury@gmail.com"
 __status__ = "Production"
 
 from behave import given, when, then, step, use_step_matcher
-from utils.my_log import MyLog
+
 from app.db.base import Base
 from app.model.medicine import Medicine
-import names
-import random
-
+from utils.my_log import MyLog
 from utils.status import FindStatus, InsertStatus
 
 use_step_matcher("re")

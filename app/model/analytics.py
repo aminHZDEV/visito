@@ -8,6 +8,7 @@ __email__ = "hordimad21@gmail.com"
 __status__ = "Production"
 
 import datetime
+
 from pymongo.database import Database
 
 from app.model.appointment import Appointment

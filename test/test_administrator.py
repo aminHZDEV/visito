@@ -1,7 +1,7 @@
 import pytest
-from utils.fakes import FAKE_DB
 
 from app.model.administrator import Administrator
+from utils.fakes import FAKE_DB
 from utils.status import InsertStatus, FindStatus
 
 params_add = \
@@ -9,7 +9,8 @@ params_add = \
      (Administrator(name='Admin_1', username='Username_4', password='Password_4'), InsertStatus.INSERTED_SUCCESSFULLY),
      (Administrator(name='Admin_4', username='Username_1', password='Password_4'), InsertStatus.DUPLICATE_ENTRY),
      (Administrator(), InsertStatus.INCOMPLETE_INFO),
-     (Administrator(name='Admin_5', username='Username_5', password='Password_5', id_cart=FAKE_DB['Administrator'].find_one({})['_id']), InsertStatus.DUPLICATE_ID)]
+     (Administrator(name='Admin_5', username='Username_5', password='Password_5',
+                    id_cart=FAKE_DB['Administrator'].find_one({})['_id']), InsertStatus.DUPLICATE_ID)]
 
 params_find = [(Administrator(username='Username_1'), FindStatus.RECORD_FOUND),
                (Administrator(username='Username_10'), FindStatus.NO_RECORDS),

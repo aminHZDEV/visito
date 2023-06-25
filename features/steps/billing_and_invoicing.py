@@ -12,7 +12,6 @@ from behave import given, when, then, step, use_step_matcher
 from app.db.base import Base
 from app.model.invoice import Invoice
 from app.model.patient import Patient
-from app.model.payment import Payment
 from utils import dummies
 from utils.my_log import MyLog
 from utils.status import FindStatus, InsertStatus

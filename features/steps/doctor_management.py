@@ -7,12 +7,12 @@ __maintainer__ = ""
 __email__ = "sm_roudaki@comp.iust.ac.ir"
 __status__ = "Production"
 
+import names
 from behave import given, when, then, step, use_step_matcher
-from utils.my_log import MyLog
+
 from app.db.base import Base
 from app.model.doctor import Doctor
-import names
-
+from utils.my_log import MyLog
 from utils.status import InsertStatus, FindStatus
 
 use_step_matcher("re")
