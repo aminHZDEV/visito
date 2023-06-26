@@ -1,0 +1,23 @@
+[
+  {
+    "name": "Item_1",
+    "quantity": 50,
+    "_id": {
+      "$oid": "648893df105dd339abb9846b"
+    }
+  },
+  {
+    "name": "Item_2",
+    "quantity": 50,
+    "_id": {
+      "$oid": "648893df105dd339abb9846c"
+    }
+  },
+  {
+    "name": "Dummy Drug",
+    "quantity": 50,
+    "_id": {
+      "$oid": "6488a6e600f30d4d1ea37764"
+    }
+  }
+]

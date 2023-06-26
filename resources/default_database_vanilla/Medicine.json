@@ -1,0 +1,16 @@
+[
+  {
+    "name": "Item_1",
+    "quantity": 50,
+    "_id": {
+      "$oid": "648893df105dd339abb9846b"
+    }
+  },
+  {
+    "name": "Item_2",
+    "quantity": 50,
+    "_id": {
+      "$oid": "648893df105dd339abb9846c"
+    }
+  }
+]

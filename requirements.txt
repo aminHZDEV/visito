@@ -1,6 +1,11 @@
-behave
-python-dotenv
-Eel
+behave~=1.2.6
+python-dotenv~=1.0.0
+Eel~=0.16.0
 PyInstaller
-names
-pytest
+names~=0.3.0
+pymongo~=4.3.3
+
+mongomock~=4.1.2
+six~=1.16.0
+pandas~=1.4.3
+pytest~=7.3.2
