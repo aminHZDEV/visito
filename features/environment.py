@@ -7,13 +7,16 @@ __maintainer__ = ""
 __email__ = "amin.hasan.zarei@gmail.com"
 __status__ = "Production"
 
+from utils.decorators.behave_examples_decorator import insert_examples
 
+
+@insert_examples()
 def before_feature(context, feature):
     pass
 
 
 def before_scenario(context, scenario):
-    pass
+    context.patchers = []
 
 
 def before_step(context, step):
@@ -33,7 +36,8 @@ def after_feature(context, feature):
 
 
 def after_scenario(context, scenario):
-    pass
+    for patcher in context.patchers:
+        patcher.stop()
 
 
 def after_step(context, step):

@@ -19,8 +19,8 @@ class Base(MyLog):
 
     def __init__(self):
         super().__init__()
-        self._mongo_client = pymongo.MongoClient(self.mdotenv.get("MONGO_URL"))
-        self._my_db = self._mongo_client[self.mdotenv.get("DB_NAME")]
+        self._mongo_client = pymongo.MongoClient(self.dotenv_values.get("MONGO_URL"))
+        self._my_db = self._mongo_client[self.dotenv_values.get("DB_NAME")]
 
     @property
     def my_db(self):

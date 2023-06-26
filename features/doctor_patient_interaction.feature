@@ -8,5 +8,3 @@ Feature: Doctor and Patient Interaction
 
     Examples:
       | symptom      | diagnosis | medicine |
-      | headache     | migraine  | aspirin  |
-      | stomach ache | gastritis | antacid  |

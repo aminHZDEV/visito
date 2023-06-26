@@ -16,12 +16,12 @@ class MyDotenv:
     """
 
     def __init__(self):
-        self._mdotenv = dotenv.dotenv_values()
+        self._dotenv_values = dotenv.dotenv_values()
 
     @property
-    def mdotenv(self):
-        return self._mdotenv
+    def dotenv_values(self):
+        return self._dotenv_values
 
-    @mdotenv.setter
-    def mdotenv(self, a):
-        self._mdotenv = a
+    @dotenv_values.setter
+    def dotenv_values(self, a):
+        self._dotenv_values = a
