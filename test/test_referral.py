@@ -5,7 +5,7 @@ from utils.my_log import MyLog
 
 log = MyLog()
 
-titles, testcases = insert_testcases("patient_referral_with_referral_types.csv")
+titles, testcases = insert_testcases("patient_referral_test_case.csv")
 
 
 @pytest.mark.parametrize(titles, testcases)
